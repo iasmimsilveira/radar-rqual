@@ -1,0 +1,1160 @@
+<title>Radar RQUAL</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Familjen+Grotesk:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: navegação fixa; abertura azul com a troca de área (Selo de Qualidade / Rede de acesso), filtros e 4 números; seções da área ativa; mapa e ficha da cidade compartilhados; método em sanfona; rodapé. */
+:root {
+  --bg: #f4f6fa; --surface: #ffffff; --surface-2: #eef1f6; --ink: #0d1b33; --ink-2: #44506a; --ink-3: #5f6b85;
+  --line: #e0e5ee; --line-2: #c9d1de; --accent: #34507a; --accent-ink: #ffffff; --accent-soft: #e8edf4;
+  --brand: #233047; --brand-ink: #ffffff; --brand-2: #e40521;
+  --op-tim: #004691; --op-vivo: #660099; --op-claro: #da291c;
+  --opf-tim: #3d82e0; --opf-vivo: #b06fdc; --opf-claro: #f0675c;
+  --q1: #0b6b2e; --q2: #82c91e; --q3: #fcc419; --q4: #ff922b; --q5: #ff6b6b; --q-na: #e3e7ee;
+  --gray-dot: #8c96a8; --ocean: #d9e6f3; --land: #edf0f4; --land-line: #c7cfdb;
+  --good: #146c2e; --bad: #c92a2a;
+  --shadow: 0 1px 2px rgba(13,27,51,.06), 0 4px 16px rgba(13,27,51,.06);
+  --f-display: "Familjen Grotesk", "Helvetica Neue", Arial, sans-serif;
+  --f-body: "IBM Plex Sans", "Segoe UI", Roboto, Arial, sans-serif;
+  --f-mono: "IBM Plex Mono", ui-monospace, Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #0a111e; --surface: #111a2b; --surface-2: #18233a; --ink: #eef2f8; --ink-2: #bcc6d8; --ink-3: #9aa6bd;
+  --line: #213049; --line-2: #2f4263; --accent: #9db4d6; --accent-ink: #0b1220; --accent-soft: #1c2a40;
+  --brand: #172033; --brand-ink: #ffffff; --brand-2: #e40521;
+  --op-tim: #4a8fe7; --op-vivo: #b46be0; --op-claro: #f0605a; --opf-tim: #4a8fe7; --opf-vivo: #b46be0; --opf-claro: #f0605a;
+  --q1: #2b8a3e; --q2: #94d82d; --q3: #ffd43b; --q4: #ffa94d; --q5: #ff8787; --q-na: #222c3f;
+  --gray-dot: #8c96a8; --ocean: #0a1830; --land: #18202e; --land-line: #2b3547; --good: #69db7c; --bad: #ff8787;
+  --shadow: 0 1px 2px rgba(0,0,0,.3), 0 4px 16px rgba(0,0,0,.25); color-scheme: dark; } }
+:root[data-theme="dark"] {
+  --bg: #0a111e; --surface: #111a2b; --surface-2: #18233a; --ink: #eef2f8; --ink-2: #bcc6d8; --ink-3: #9aa6bd;
+  --line: #213049; --line-2: #2f4263; --accent: #9db4d6; --accent-ink: #0b1220; --accent-soft: #1c2a40;
+  --brand: #172033; --brand-ink: #ffffff; --brand-2: #e40521;
+  --op-tim: #4a8fe7; --op-vivo: #b46be0; --op-claro: #f0605a; --opf-tim: #4a8fe7; --opf-vivo: #b46be0; --opf-claro: #f0605a;
+  --q1: #2b8a3e; --q2: #94d82d; --q3: #ffd43b; --q4: #ffa94d; --q5: #ff8787; --q-na: #222c3f;
+  --gray-dot: #8c96a8; --ocean: #0a1830; --land: #18202e; --land-line: #2b3547; --good: #69db7c; --bad: #ff8787;
+  --shadow: 0 1px 2px rgba(0,0,0,.3), 0 4px 16px rgba(0,0,0,.25); color-scheme: dark; }
+/* Template da operadora escolhida: o topo e os destaques passam para a cor de identificação dela. */
+:root[data-op="TIM"] { --brand: #004691; --accent: #004691; --accent-soft: #e6eef9; }
+:root[data-op="VIVO"] { --brand: #660099; --accent: #660099; --accent-soft: #f3e8fa; }
+:root[data-op="CLARO"] { --brand: #c4161c; --accent: #c4161c; --accent-soft: #fdecea; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"])[data-op="TIM"] { --brand: #0b3270; --accent: #6fa3ef; --accent-soft: #15284a; }
+  :root:not([data-theme="light"])[data-op="VIVO"] { --brand: #3d0a5c; --accent: #c48ae8; --accent-soft: #2a1540; }
+  :root:not([data-theme="light"])[data-op="CLARO"] { --brand: #7a1410; --accent: #ff8a80; --accent-soft: #3a1614; } }
+:root[data-theme="dark"][data-op="TIM"] { --brand: #0b3270; --accent: #6fa3ef; --accent-soft: #15284a; }
+:root[data-theme="dark"][data-op="VIVO"] { --brand: #3d0a5c; --accent: #c48ae8; --accent-soft: #2a1540; }
+:root[data-theme="dark"][data-op="CLARO"] { --brand: #7a1410; --accent: #ff8a80; --accent-soft: #3a1614; }
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+body { background: var(--bg); color: var(--ink); font: 15px/1.6 var(--f-body); margin: 0; }
+@media (min-width: 1600px) { body { font-size: 17px; } svg text { font-size: 13px !important; } .container { max-width: 1400px; } }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 40; background: var(--surface); }
+.container { max-width: 1200px; margin: 0 auto; padding-left: max(20px, env(safe-area-inset-left, 0px)); padding-right: max(20px, env(safe-area-inset-right, 0px)); }
+h1, h2, h3 { font-family: var(--f-display); margin: 0; letter-spacing: -0.015em; text-wrap: balance; }
+p { margin: 0; }
+.muted { color: var(--ink-2); }
+.small { font-size: 13px; }
+.num { font-variant-numeric: tabular-nums; }
+a { color: var(--accent); }
+button, select, input { font: inherit; color: inherit; }
+:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+.nav { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 30; background: color-mix(in srgb, var(--surface) 94%, transparent); backdrop-filter: saturate(1.4) blur(8px); border-bottom: 1px solid var(--line); }
+.nav .container { display: flex; align-items: center; gap: 20px; height: 60px; }
+.brandmark { display: flex; align-items: center; gap: 10px; font: 700 18px var(--f-display); color: var(--ink); text-decoration: none; white-space: nowrap; }
+.brandmark svg { color: var(--ink-2); flex: none; }
+.brandmark span { display: grid; line-height: 1.15; }
+.brandmark small { font: 500 11.5px var(--f-body); color: var(--ink-3); letter-spacing: 0; }
+.nav .links { display: flex; gap: 2px; flex: 1; min-width: 0; overflow-x: auto; scrollbar-width: none; }
+.nav .links::-webkit-scrollbar { display: none; }
+.nav .links a { color: var(--ink-2); text-decoration: none; font-size: 14px; font-weight: 500; padding: 6px 9px; border-radius: 8px; white-space: nowrap; }
+.nav .links a:hover { background: var(--surface-2); color: var(--ink); }
+.oplbl { font-size: 12.5px; color: var(--ink-3); white-space: nowrap; margin-right: -12px; }
+@media (max-width: 1080px) { .oplbl { display: none; } }
+.opsw { display: inline-flex; background: var(--surface-2); border-radius: 999px; padding: 3px; gap: 2px; flex: none; }
+.opsw button { border: 0; background: transparent; padding: 6px 12px; border-radius: 999px; font-size: 13px; font-weight: 600; color: var(--ink-2); cursor: pointer; display: inline-flex; align-items: center; gap: 6px; min-height: 32px; }
+.opsw button i { width: 8px; height: 8px; border-radius: 50%; }
+.opsw button[aria-pressed="true"] { background: var(--surface); color: var(--ink); box-shadow: var(--shadow); }
+@media (max-width: 640px) { .nav .container { gap: 10px; height: auto; padding-top: 8px; padding-bottom: 8px; flex-wrap: wrap; } .nav .links { order: 3; flex-basis: 100%; } .brandmark { font-size: 15px; } .opsw { margin-left: auto; } .opsw button { padding: 5px 9px; font-size: 12.5px; } .opsw button i { display: none; } }
+.hero { background: var(--brand); color: var(--brand-ink); }
+.hero .container { padding-top: 36px; padding-bottom: 36px; display: grid; gap: 22px; }
+.hero :focus-visible { outline: 3px solid #fff; outline-offset: 2px; }
+.areasw { display: inline-flex; background: rgba(0,0,0,.18); border-radius: 14px; padding: 4px; gap: 4px; flex-wrap: wrap; width: fit-content; }
+.areasw button { border: 0; background: transparent; color: #fff; padding: 10px 18px; border-radius: 10px; font: 600 15px var(--f-display); cursor: pointer; opacity: .85; display: grid; text-align: left; gap: 0; }
+.areasw button small { font: 500 12px var(--f-body); opacity: .8; }
+.areasw button[aria-selected="true"] { background: #fff; color: var(--brand); opacity: 1; }
+.hero .kicker { font-size: 13px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; opacity: .85; }
+.hero h1 { font-size: clamp(28px, 4.2vw, 42px); line-height: 1.1; font-weight: 700; color: #fff; max-width: 24ch; }
+.hero .lead { font-size: 16.5px; opacity: .92; max-width: 70ch; }
+.controls { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+.controls .field { display: flex; align-items: center; gap: 8px; background: #fff; color: #0d1b33; border-radius: 12px; padding: 4px 6px 4px 14px; min-width: 0; }
+.controls .field:focus-within { box-shadow: 0 0 0 3px #fff, 0 0 0 5px var(--brand); }
+.controls input, .controls select { border: 0; background: transparent; padding: 9px 6px; font-size: 15px; outline: none; color: #0d1b33; min-width: 0; }
+.controls input { width: 230px; max-width: 60vw; }
+.perseg { display: inline-flex; background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.3); border-radius: 12px; padding: 3px; gap: 2px; }
+.perseg button { border: 0; background: transparent; color: #fff; padding: 8px 14px; border-radius: 9px; font-size: 14px; font-weight: 600; cursor: pointer; }
+.perseg button[aria-pressed="true"] { background: #fff; color: var(--brand); }
+.fixedper { font-size: 14px; background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.3); border-radius: 12px; padding: 9px 14px; }
+.chip { background: rgba(255,255,255,.14); border: 1px solid rgba(255,255,255,.3); color: #fff; border-radius: 999px; padding: 4px 4px 4px 14px; font-size: 14px; display: inline-flex; align-items: center; gap: 6px; }
+.chip button { border: 0; background: rgba(255,255,255,.22); color: #fff; width: 32px; height: 32px; border-radius: 50%; cursor: pointer; font-size: 16px; line-height: 1; }
+label.tg { display: inline-flex; gap: 8px; align-items: center; font-size: 13.5px; cursor: pointer; }
+label.tg input { width: 18px; height: 18px; accent-color: #fff; padding: 0; }
+@media (max-width: 520px) { .controls .field { flex: 1 1 100%; } .controls input { width: 100%; max-width: none; } }
+.tiles { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; }
+@media (max-width: 900px) { .tiles { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.tile { background: rgba(255,255,255,.09); border: 1px solid rgba(255,255,255,.18); border-radius: 14px; padding: 16px 18px; display: grid; gap: 4px; align-content: start; }
+.tile .v { font: 700 32px/1.05 var(--f-display); color: #fff; font-variant-numeric: tabular-nums; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.tile .v .pill { min-width: 46px; height: 40px; border-radius: 12px; font: 700 24px/1 var(--f-display); }
+.tile .v small { font: 500 14px var(--f-body); opacity: .85; }
+.tile .l { font-size: 14px; font-weight: 600; }
+.tile .s { font-size: 12.5px; opacity: .85; }
+.fresh { font-size: 12.5px; opacity: .85; }
+main { display: grid; gap: 60px; padding: 44px 0 72px; }
+section { display: grid; gap: 20px; scroll-margin-top: 80px; min-width: 0; }
+section[hidden] { display: none !important; }
+.sec-head { display: grid; gap: 6px; max-width: 78ch; }
+.sec-head h2 { font-size: 28px; font-weight: 700; }
+.badge-ind { display: inline-flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; color: var(--accent); }
+.badge-ind b { font-family: var(--f-mono); background: var(--accent-soft); border-radius: 6px; padding: 2px 8px; }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; box-shadow: var(--shadow); padding: 22px; min-width: 0; }
+.card h3 { font-size: 17px; font-weight: 600; }
+.headline { font: 500 20px/1.5 var(--f-display); max-width: 70ch; }
+.headline b { font-weight: 700; }
+.cards-2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; }
+@media (max-width: 860px) { .cards-2 { grid-template-columns: 1fr; } }
+.opgrid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
+@media (max-width: 860px) { .opgrid { grid-template-columns: 1fr; } }
+.opcard { display: grid; gap: 14px; }
+.opcard.focus { border-color: var(--accent); box-shadow: 0 0 0 2px var(--accent), var(--shadow); }
+.opcard .hd { display: flex; align-items: center; gap: 14px; }
+.opcard .nm { font: 700 18px var(--f-display); display: flex; align-items: center; gap: 8px; }
+.opcard .nm i { width: 10px; height: 10px; border-radius: 50%; }
+.badge { width: 60px; height: 60px; border-radius: 16px; display: grid; place-items: center; font: 700 34px/1 var(--f-display); flex: none; }
+.parts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+.part { background: var(--surface-2); border-radius: 12px; padding: 10px 12px; display: grid; gap: 2px; min-width: 0; }
+.part .l { font-size: 12px; color: var(--ink-2); }
+.part .v { font: 700 18px var(--f-display); font-variant-numeric: tabular-nums; }
+.part .f { font-size: 12px; color: var(--ink-3); }
+.strip { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 18px; background: var(--accent-soft); border-radius: 14px; padding: 14px 18px; font-size: 14px; }
+.ov { display: grid; gap: 14px; }
+.ov .top { display: flex; justify-content: space-between; align-items: start; gap: 12px; }
+.ov .big { font: 700 40px/1 var(--f-display); font-variant-numeric: tabular-nums; }
+.ov .big small { font: 500 14px var(--f-body); color: var(--ink-2); margin-left: 6px; }
+.ov a.more { font-size: 14px; font-weight: 600; text-decoration: none; white-space: nowrap; }
+.pill { display: inline-grid; place-items: center; min-width: 26px; height: 24px; padding: 0 7px; border-radius: 12px; font: 700 12.5px var(--f-body); }
+.bad { color: var(--bad); font-weight: 600; }
+.bad::before { content: "▼ "; font-size: .8em; }
+.tabs { display: flex; gap: 4px; border-bottom: 1px solid var(--line); overflow-x: auto; scrollbar-width: none; }
+.tabs button { border: 0; background: transparent; padding: 10px 14px; font-size: 14.5px; font-weight: 600; color: var(--ink-2); cursor: pointer; border-bottom: 3px solid transparent; margin-bottom: -1px; white-space: nowrap; }
+.tabs button[aria-selected="true"] { color: var(--accent); border-bottom-color: var(--accent); }
+[role="tabpanel"][hidden] { display: none !important; }
+.pills { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.pills .lbl { font-size: 13px; color: var(--ink-3); margin-right: 2px; }
+.pills button { border: 1px solid var(--line-2); background: var(--surface); padding: 7px 13px; border-radius: 999px; font-size: 13px; cursor: pointer; color: var(--ink-2); min-height: 34px; }
+.pills button[aria-pressed="true"] { background: var(--ink); color: var(--surface); border-color: var(--ink); }
+.btn { border: 1px solid var(--line-2); background: var(--surface); padding: 8px 14px; border-radius: 10px; font-size: 13.5px; font-weight: 600; cursor: pointer; min-height: 36px; }
+.btn:hover { border-color: var(--ink-3); }
+.indgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 268px), 1fr)); gap: 16px; }
+.indcard { text-align: left; background: var(--surface); border: 1px solid var(--line); border-radius: 16px; box-shadow: var(--shadow); padding: 16px 18px; display: grid; gap: 10px; cursor: pointer; color: var(--ink); min-width: 0; align-content: start; }
+.indcard:hover { border-color: var(--line-2); }
+.indcard[aria-pressed="true"] { border-color: var(--accent); box-shadow: 0 0 0 2px var(--accent), var(--shadow); }
+.indcard .top { display: flex; justify-content: space-between; gap: 8px; align-items: baseline; }
+.indcard .name { font: 700 15.5px/1.25 var(--f-display); }
+.code { font: 600 11.5px var(--f-mono); color: var(--accent); background: var(--accent-soft); border-radius: 6px; padding: 1px 6px; white-space: nowrap; }
+.indcard .meta { font-size: 12.5px; color: var(--ink-3); }
+.oprow { display: grid; grid-template-columns: 50px minmax(0, 1fr) 70px; gap: 8px; align-items: center; font-size: 13px; }
+.oprow .on { display: flex; align-items: center; gap: 6px; }
+.oprow .on i { width: 7px; height: 7px; border-radius: 50%; }
+.oprow .track { position: relative; height: 7px; background: var(--surface-2); border-radius: 4px; }
+.oprow .track span { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 4px; }
+.oprow .val { font-weight: 600; text-align: right; font-variant-numeric: tabular-nums; }
+.oprow.focus .on { font-weight: 700; }
+.def { background: var(--surface-2); border-radius: 12px; padding: 12px 14px; font-size: 14px; display: grid; gap: 6px; }
+.def q { font-style: italic; }
+.tbl-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 14px; background: var(--surface); box-shadow: var(--shadow); }
+table { border-collapse: collapse; width: 100%; font-size: 14px; }
+th, td { text-align: left; padding: 12px 14px; border-bottom: 1px solid var(--line); vertical-align: middle; }
+th { font-size: 12px; font-weight: 600; color: var(--ink-2); background: var(--surface-2); white-space: nowrap; }
+tbody tr:last-child td { border-bottom: 0; }
+td.r, th.r { text-align: right; }
+td.c, th.c { text-align: center; }
+tr.click { cursor: pointer; }
+tr.click:hover td { background: color-mix(in srgb, var(--accent-soft) 60%, transparent); }
+td.cityc { min-width: 200px; }
+.cityc .sub { display: block; font-size: 12.5px; color: var(--ink-3); }
+.linkbtn { border: 0; background: none; padding: 0; font: 600 14px var(--f-body); color: var(--ink); cursor: pointer; text-align: left; text-decoration: underline; text-decoration-color: var(--line-2); text-underline-offset: 3px; }
+.linkbtn:hover { text-decoration-color: var(--accent); }
+.meter { display: grid; grid-template-columns: 70px 110px; gap: 10px; align-items: center; justify-content: end; }
+.meter .bar { position: relative; height: 8px; border-radius: 4px; background: var(--surface-2); }
+.meter .bar span { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 4px; }
+.meter .bar .min { position: absolute; top: -4px; bottom: -4px; width: 2px; background: var(--ink-2); }
+.rivals { display: grid; gap: 2px; font-size: 13px; justify-items: end; }
+.rivals span { display: inline-flex; gap: 6px; align-items: center; white-space: nowrap; }
+.rivals i { width: 7px; height: 7px; border-radius: 50%; }
+.tag { display: inline-block; font-size: 12px; font-weight: 600; padding: 2px 8px; border-radius: 999px; background: var(--surface-2); color: var(--ink-2); white-space: nowrap; }
+.tag.ok { background: color-mix(in srgb, var(--good) 14%, transparent); color: var(--good); }
+.seal-move { display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; }
+.more-row { display: flex; justify-content: center; gap: 10px; align-items: center; padding-top: 6px; flex-wrap: wrap; }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: 12.5px; color: var(--ink-2); align-items: center; }
+.legend i { display: inline-block; width: 12px; height: 12px; border-radius: 3px; margin-right: 6px; vertical-align: -2px; }
+.legend i.hatch { background: repeating-linear-gradient(45deg, var(--q-na) 0 3px, var(--surface) 3px 6px); outline: 1px solid var(--line-2); }
+.legend .ln { width: 16px; height: 3px; border-radius: 2px; vertical-align: 3px; }
+.legend button { border: 1px solid transparent; background: transparent; color: var(--ink-2); font-size: 12.5px; padding: 4px 8px; border-radius: 8px; cursor: pointer; min-height: 30px; }
+.legend button[aria-pressed="false"] { opacity: .45; text-decoration: line-through; }
+.legend button:hover { border-color: var(--line-2); }
+svg text { fill: var(--ink-2); font: 11.5px var(--f-body); }
+svg .grid line { stroke: var(--line); }
+.chart { position: relative; min-width: 0; }
+.chartnote { font-size: 12.5px; color: var(--ink-3); }
+.tip { position: absolute; pointer-events: none; background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; font-size: 12.5px; box-shadow: var(--shadow); z-index: 5; min-width: 170px; max-width: 270px; }
+.info ul { margin: 0; padding-left: 18px; display: grid; gap: 6px; font-size: 14px; }
+.mapwrap { display: grid; grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr); gap: 20px; align-items: start; }
+@media (max-width: 960px) { .mapwrap { grid-template-columns: 1fr; } }
+.mapcard { padding: 0; overflow: hidden; display: grid; }
+.maptop { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 10px; padding: 14px 16px; border-bottom: 1px solid var(--line); align-items: center; }
+.maptop select { border: 1px solid var(--line-2); background: var(--surface); border-radius: 10px; padding: 8px 10px; font-size: 14px; }
+#map { position: relative; background: var(--ocean); touch-action: pan-y; }
+#map svg { width: 100%; height: auto; display: block; cursor: grab; }
+#map svg:active { cursor: grabbing; }
+#map path.mun { stroke: var(--surface); stroke-width: 0.12; }
+#map path.mun.dim { opacity: .12; }
+#map path.mun.sel { stroke: var(--ink); }
+#map path.pais { fill: var(--land); stroke: var(--land-line); stroke-width: .6; pointer-events: none; }
+#map path.grat { fill: none; stroke: var(--land-line); stroke-width: .4; stroke-dasharray: 2 4; opacity: .6; pointer-events: none; }
+#map path.ufb { fill: none; stroke: var(--ink-3); stroke-width: 0.7; pointer-events: none; }
+#map path.brasil { fill: none; stroke: var(--ink-2); stroke-width: 1.2; pointer-events: none; }
+#map text.lbl-uf { font: 700 11px var(--f-display); fill: var(--ink); paint-order: stroke; stroke: var(--surface); stroke-width: 3px; stroke-linejoin: round; pointer-events: none; text-anchor: middle; }
+#map text.lbl-cap { font: 500 10px var(--f-body); fill: var(--ink); paint-order: stroke; stroke: var(--surface); stroke-width: 2.5px; pointer-events: none; }
+#map circle.cap { fill: var(--surface); stroke: var(--ink); pointer-events: none; }
+#map text.lbl-pais { font: italic 500 11px var(--f-body); fill: var(--ink-3); pointer-events: none; text-anchor: middle; text-transform: uppercase; letter-spacing: .08em; }
+.zoombtns { position: absolute; right: 12px; top: 12px; display: grid; gap: 6px; z-index: 3; }
+.zoombtns button { width: 36px; height: 36px; border-radius: 10px; border: 1px solid var(--line); background: var(--surface); color: var(--ink); font: 600 16px var(--f-body); cursor: pointer; box-shadow: var(--shadow); }
+.maphint { position: absolute; left: 12px; bottom: 12px; font-size: 12px; background: var(--surface); color: var(--ink-2); border-radius: 8px; padding: 4px 8px; box-shadow: var(--shadow); }
+.mapleg { padding: 12px 16px; border-top: 1px solid var(--line); }
+.side { display: grid; gap: 16px; }
+.side h3 { font-size: 22px; }
+.stats { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+.stat { background: var(--surface-2); border-radius: 12px; padding: 10px 12px; display: grid; gap: 2px; }
+.stat .l { font-size: 12px; color: var(--ink-2); }
+.stat .v { font: 700 18px var(--f-display); font-variant-numeric: tabular-nums; }
+.note { font-size: 13.5px; background: var(--surface-2); border-radius: 12px; padding: 10px 12px; }
+.ranklist { display: grid; gap: 2px; }
+.ranklist button { display: grid; grid-template-columns: 24px minmax(0, 1fr) auto; gap: 10px; align-items: center; text-align: left; border: 0; background: transparent; padding: 9px 8px; border-radius: 10px; cursor: pointer; font-size: 14px; min-height: 40px; }
+.ranklist button:hover { background: var(--surface-2); }
+.ranklist .n { color: var(--ink-3); font-size: 12px; }
+details.acc { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 4px 18px; }
+details.acc + details.acc { margin-top: 10px; }
+details.acc summary { cursor: pointer; font-weight: 600; padding: 12px 0; list-style: none; display: flex; justify-content: space-between; gap: 12px; }
+details.acc summary::-webkit-details-marker { display: none; }
+details.acc summary::after { content: "+"; font-weight: 400; color: var(--ink-3); font-size: 20px; line-height: 1; }
+details.acc[open] summary::after { content: "−"; }
+details.acc .body { padding: 0 0 16px; color: var(--ink-2); font-size: 14.5px; max-width: 84ch; display: grid; gap: 8px; }
+footer { border-top: 1px solid var(--line); background: var(--surface); }
+footer .container { padding-top: 26px; padding-bottom: 34px; display: grid; gap: 8px; font-size: 13px; color: var(--ink-3); }
+.loading { color: var(--ink-3); font-size: 13px; padding: 40px 0; text-align: center; }
+</style>
+
+<header class="nav"><div class="container">
+  <a class="brandmark" href="#top"><svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="3" y="14" width="4" height="7" rx="1"/><rect x="10" y="9" width="4" height="12" rx="1"/><rect x="17" y="4" width="4" height="17" rx="1"/></svg><span>Radar RQUAL<small>Dados públicos da Anatel sobre Claro, TIM e Vivo</small></span></a>
+  <nav class="links" id="navLinks" aria-label="Seções"></nav>
+  <span class="oplbl" aria-hidden="true">Ver detalhes de</span>
+  <div class="opsw" id="fOp" role="group" aria-label="Ver detalhes de">
+    <button type="button" data-op="CLARO" aria-pressed="true"><i style="background:var(--opf-claro)"></i>Claro</button>
+    <button type="button" data-op="TIM" aria-pressed="false"><i style="background:var(--opf-tim)"></i>TIM</button>
+    <button type="button" data-op="VIVO" aria-pressed="false"><i style="background:var(--opf-vivo)"></i>Vivo</button>
+  </div>
+</div></header>
+
+<div class="hero" id="top"><div class="container">
+  <div class="areasw" id="fArea" role="tablist" aria-label="Área do site">
+    <button type="button" role="tab" id="tabSelo" data-area="selo" aria-selected="true">Selo de Qualidade<small>IQS, IR, IQP e os 8 indicadores</small></button>
+    <button type="button" role="tab" id="tabAcesso" data-area="acesso" aria-selected="false" tabindex="-1">Rede de acesso<small>IND4 velocidade e IND8 disponibilidade</small></button>
+  </div>
+  <div style="display:grid;gap:10px">
+    <span class="kicker" id="heroKicker"></span>
+    <h1 id="heroTitle"></h1>
+    <p class="lead" id="heroLead"></p>
+    <p class="fresh">Projeto independente com dados públicos da Anatel. Não é canal oficial da Anatel nem de nenhuma operadora.</p>
+  </div>
+  <div class="controls">
+    <div class="perseg" id="fPer" role="group" aria-label="Período"></div>
+    <span class="fixedper" id="fixedPer" hidden></span>
+    <div class="field"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+      <input type="search" id="fMun" list="munList" placeholder="Buscar cidade" aria-label="Buscar cidade"><datalist id="munList"></datalist></div>
+    <div class="field" style="padding-left:10px"><select id="fUf" aria-label="Estado"><option value="">Brasil inteiro</option></select></div>
+    <span id="scopeChip"></span>
+    <label class="tg" id="confWrap" hidden><input type="checkbox" id="fConf" checked> IND4 só com amostra significativa em mais da metade dos meses</label>
+  </div>
+  <div class="tiles" id="tiles" aria-live="polite"></div>
+  <p class="fresh" id="fresh"></p>
+</div></div>
+
+<main class="container">
+  <!-- Área: Selo de Qualidade -->
+  <section id="visao" data-area="selo">
+    <div class="sec-head"><h2 id="visTitle">Visão geral</h2><p class="headline" id="headline" aria-live="polite"></p></div>
+    <div class="card" id="gapCard"></div>
+    <div class="opgrid" id="opCards"></div>
+    <div class="strip" id="pubStrip"></div>
+  </section>
+
+  <section id="indicadores" data-area="selo">
+    <div class="sec-head"><h2>Os 8 indicadores do IQS</h2><p class="muted" id="indSub"></p></div>
+    <div class="indgrid" id="indGrid"></div>
+    <div class="card" style="display:grid;gap:12px" id="indDetail"></div>
+    <div class="card" style="display:grid;gap:10px"><h3>Quanto cada indicador pesa na nota</h3><p class="small muted" id="gainSub"></p><div class="chart" id="chGain"></div></div>
+  </section>
+
+  <section id="evolucao" data-area="selo">
+    <div class="sec-head"><h2>Evolução por semestre</h2><p class="muted" id="evoSub"></p></div>
+    <div class="tabs" role="tablist" aria-label="Índice">
+      <button type="button" role="tab" id="t-ev-iqs" aria-controls="ev-iqs" aria-selected="true" data-tab="ev-iqs">IQS</button>
+      <button type="button" role="tab" id="t-ev-ir" aria-controls="ev-ir" aria-selected="false" tabindex="-1" data-tab="ev-ir">IR</button>
+    </div>
+    <div role="tabpanel" id="ev-iqs" aria-labelledby="t-ev-iqs"><div class="card" style="display:grid;gap:10px"><h3>IQS calculado · nota da rede, de 0 a 100</h3><p class="small muted">90 ou mais é a faixa 1.</p><div class="legend" id="legE1"></div><div class="chart" id="chE1"></div></div></div>
+    <div role="tabpanel" id="ev-ir" aria-labelledby="t-ev-ir" hidden><div class="card" style="display:grid;gap:10px"><h3>IR calculado · reclamações na Anatel por mil acessos</h3><p class="small muted">Abaixo de 0,3 é faixa 3; abaixo de 0,2, faixa 2.</p><div class="legend" id="legE2"></div><div class="chart" id="chE2"></div></div></div>
+  </section>
+
+  <section id="estados" data-area="selo">
+    <div class="sec-head"><h2>Selo estadual calculado</h2><p class="muted">Soma das faixas de IQS, IR e IQP por UF. Clique no nome do estado para filtrar o site.</p></div>
+    <div class="tbl-wrap"><table id="ufTbl"></table></div>
+  </section>
+
+  <section id="cidades" data-area="selo">
+    <div class="sec-head"><h2>Cidades</h2><p class="muted">Selo municipal calculado das três operadoras. Pela regra divulgada pela Anatel (art. 37 do RGC), se o selo municipal de uma operadora <b>cair</b> de A, B ou C para D ou E entre ciclos anuais, após a contratação, o cliente daquele município pode cancelar o contrato daquele serviço sem multa de fidelização (<a href="https://www.gov.br/anatel/pt-br/assuntos/noticias/ma-qualidade-do-servico-permitira-cancelamento-do-contrato-sem-multa-de-fidelizacao" target="_blank" rel="noopener">Anatel</a>).</p></div>
+    <div class="pills" id="cSort" role="group" aria-label="Mostrar">
+      <span class="lbl">Mostrar</span>
+      <button type="button" data-v="grandes" aria-pressed="true">Mais acessos</button>
+      <button type="button" data-v="de">Selo calculado D ou E</button>
+      <button type="button" data-v="caiu" id="pillCaiu">Caiu de A/B/C para D/E (cálculo 2025 → 2026)</button>
+    </div>
+    <div class="tbl-wrap"><table id="cTbl"></table></div>
+    <div class="more-row"><button type="button" class="btn" id="cMore">Mostrar mais 15</button><button type="button" class="btn" id="cCopy">Copiar lista (CSV)</button><span class="small muted" id="cMsg" aria-live="polite"></span></div>
+  </section>
+
+  <!-- Área: Rede de acesso -->
+  <section id="avisao" data-area="acesso" hidden>
+    <div class="sec-head"><h2 id="aVisTitle">Visão geral</h2><p class="headline" id="aHeadline" aria-live="polite"></p></div>
+    <div class="cards-2">
+      <div class="card ov"><div class="top"><div><span class="badge-ind"><b>IND4</b>Cumprimento de velocidade</span><div class="big" id="ovBig4"></div></div><a class="more" href="#ind4">Ver cidades →</a></div><div class="legend" id="ovLeg4"></div><div class="chart" id="ovCh4"></div></div>
+      <div class="card ov"><div class="top"><div><span class="badge-ind"><b>IND8</b>Disponibilidade</span><div class="big" id="ovBig8"></div></div><a class="more" href="#ind8">Ver cidades →</a></div><div class="legend" id="ovLeg8"></div><div class="chart" id="ovCh8"></div></div>
+    </div>
+  </section>
+
+  <section id="ind4" data-area="acesso" hidden>
+    <div class="sec-head">
+      <span class="badge-ind"><b>IND4</b>Indicador da Anatel</span>
+      <h2>Cumprimento de velocidade de download e upload</h2>
+      <p class="muted">Pela fórmula do Manual Operacional: (testes de download no corte ou acima + testes de upload no corte ou acima) ÷ (total de testes de download + total de testes de upload). Corte em 2026: download de 7 Mbps e upload de 1,5 Mbps; a partir de 2027, download de 10 Mbps. Meta 95%, mínimo 65%.</p>
+    </div>
+    <div class="tabs" role="tablist" aria-label="IND4">
+      <button type="button" role="tab" id="t-t4-lista" aria-controls="t4-lista" aria-selected="true" data-tab="t4-lista">Cidades abaixo da meta</button>
+      <button type="button" role="tab" id="t-t4-comp" aria-controls="t4-comp" aria-selected="false" tabindex="-1" data-tab="t4-comp">Comparação com concorrentes</button>
+      <button type="button" role="tab" id="t-t4-evo" aria-controls="t4-evo" aria-selected="false" tabindex="-1" data-tab="t4-evo">Mês a mês</button>
+      <button type="button" role="tab" id="t-t4-como" aria-controls="t4-como" aria-selected="false" tabindex="-1" data-tab="t4-como">Como é medido</button>
+    </div>
+    <div role="tabpanel" id="t4-lista" aria-labelledby="t-t4-lista" style="display:grid;gap:14px">
+      <div class="pills" id="s4" role="group" aria-label="Ordenar">
+        <span class="lbl">Ordenar por</span>
+        <button type="button" data-v="imp" aria-pressed="true">Maior produto acessos × distância até a meta</button>
+        <button type="button" data-v="de">Selo calculado D/E que sobe com o IND4 na meta</button>
+        <button type="button" data-v="dl">Menor mediana de download 4G</button>
+        <button type="button" data-v="pior">Menor IND4</button>
+      </div>
+      <div class="pills" id="d4" role="group" aria-label="Filtrar">
+        <span class="lbl">Mostrar</span>
+        <button type="button" data-v="" aria-pressed="true">Todas abaixo da meta</button>
+        <button type="button" data-v="nosso">Algum concorrente 5 pontos ou mais acima</button>
+        <button type="button" data-v="todos">Todas as operadoras abaixo de 80%</button>
+      </div>
+      <div class="tbl-wrap"><table id="t4"></table></div>
+      <div class="more-row"><button type="button" class="btn" id="more4">Mostrar mais 15</button><button type="button" class="btn" id="copy4">Copiar lista (CSV)</button><span class="small muted" id="msg4" aria-live="polite"></span></div>
+    </div>
+    <div role="tabpanel" id="t4-comp" aria-labelledby="t-t4-comp" hidden><div class="card" style="display:grid;gap:10px"><h3>Operadora em foco contra o melhor concorrente</h3><p class="small muted">Cada ponto é uma cidade, do tamanho da base de acessos. Acima da diagonal, o melhor concorrente teve IND4 maior que o da operadora em foco na mesma cidade. Clique em um ponto para abrir a cidade.</p><div class="legend" id="legSc"></div><div class="chart" id="chSc"></div></div></div>
+    <div role="tabpanel" id="t4-evo" aria-labelledby="t-t4-evo" hidden><div class="card" style="display:grid;gap:10px"><h3 id="c4Title">Mês a mês</h3><div class="legend" id="leg4"></div><div class="chart" id="ch4"></div><p class="chartnote">As linhas de meta e mínimo mostram os valores de 2026. Até dez/24 a meta e o mínimo do IND4 eram 90% e 60% (base da Anatel), e o corte de download era de 5 Mbps em 2025 (DVR).</p></div></div>
+    <div role="tabpanel" id="t4-como" aria-labelledby="t-t4-como" hidden><div class="card info" style="display:grid;gap:10px"><h3>Como a Anatel mede o IND4</h3><ul>
+      <li>Definição (Manual Operacional, Anexo 5): <q>Este indicador expressa a capacidade da rede em relação ao cumprimento das referências ou valores contratados de volume de dados transmitidos por segundo, tendo como objetivo representar o desempenho da rede em cumprir a velocidade utilizada como referência para cada tecnologia móvel.</q></li>
+      <li>As medições vêm de aplicativos de medição homologados, nos municípios em que a prestadora tem pelo menos 1.000 acessos.</li>
+      <li>A Anatel publica, mês a mês, o número de medições, o erro amostral e se a amostra foi estatisticamente significativa.</li>
+      <li>A velocidade de download 4G mostrada nas listas é o indicador informativo INF4, que a Anatel calcula como a <b>mediana</b> das medições do mês. Aqui aparece a média das medianas mensais de 2026.</li></ul></div></div>
+  </section>
+
+  <section id="ind8" data-area="acesso" hidden>
+    <div class="sec-head">
+      <span class="badge-ind"><b>IND8</b>Indicador da Anatel</span>
+      <h2>Disponibilidade</h2>
+      <p class="muted">Meta 100% (valor da base de dados da Anatel; a tabela do DVR indica 99,99%, e a diferença no IQS é de até 0,03 ponto). Mínimo 98%. Pela regra, abaixo de 99,6% a nota do indicador fica abaixo de 8 de 10.</p>
+    </div>
+    <div class="tabs" role="tablist" aria-label="IND8">
+      <button type="button" role="tab" id="t-t8-lista" aria-controls="t8-lista" aria-selected="true" data-tab="t8-lista">Cidades abaixo de 99,6%</button>
+      <button type="button" role="tab" id="t-t8-evo" aria-controls="t8-evo" aria-selected="false" tabindex="-1" data-tab="t8-evo">Mês a mês</button>
+      <button type="button" role="tab" id="t-t8-como" aria-controls="t8-como" aria-selected="false" tabindex="-1" data-tab="t8-como">Como é contado</button>
+    </div>
+    <div role="tabpanel" id="t8-lista" aria-labelledby="t-t8-lista" style="display:grid;gap:14px">
+      <div class="pills" id="s8" role="group" aria-label="Ordenar">
+        <span class="lbl">Ordenar por</span>
+        <button type="button" data-v="imp" aria-pressed="true">Maior produto acessos × distância de 100%</button>
+        <button type="button" data-v="pior">Pior mês</button>
+        <button type="button" data-v="de">Selo calculado D/E que sobe com o IND8 na meta</button>
+      </div>
+      <div class="tbl-wrap"><table id="t8"></table></div>
+      <div class="more-row"><button type="button" class="btn" id="more8">Mostrar mais 15</button><button type="button" class="btn" id="copy8">Copiar lista (CSV)</button><span class="small muted" id="msg8" aria-live="polite"></span></div>
+    </div>
+    <div role="tabpanel" id="t8-evo" aria-labelledby="t-t8-evo" hidden><div class="card" style="display:grid;gap:10px"><h3 id="c8Title">Mês a mês</h3><div class="legend" id="leg8"></div><div class="chart" id="ch8"></div></div></div>
+    <div role="tabpanel" id="t8-como" aria-labelledby="t-t8-como" hidden><div class="card info" style="display:grid;gap:10px"><h3>Como a Anatel conta uma interrupção no IND8</h3><ul>
+      <li>Definição (Manual Operacional, Anexo 7): <q>Este indicador expressa o tempo em que o serviço está em operação, à disposição dos usuários sem interrupção, tendo como objetivo caracterizar e estabelecer as condições de acompanhamento e de controle do tempo em que os serviços estariam em operação, à disposição dos usuários, sem a afetação por conta da ocorrência de evento de interrupção.</q></li>
+      <li>Conta paralisação total do serviço por período contínuo de 10 minutos ou mais.</li>
+      <li>Na telefonia móvel, a interrupção precisa afetar <b>mais de 20% das ERBs do município ou 20 ERBs do município, o que for menor</b> (indisponibilidade total da ERB, considerando todas as tecnologias). A regra das 20 ERBs vale desde janeiro de 2023.</li>
+      <li>Em município com uma única ERB, desde janeiro de 2023 a regra é aplicada por setor do sistema irradiante.</li>
+      <li>Os eventos vêm dos tickets de falhas dos equipamentos monitorados da prestadora. Não há plano amostral: entram todas as interrupções que atendem aos critérios.</li></ul></div></div>
+  </section>
+
+  <!-- Compartilhado -->
+  <section id="mapa">
+    <div class="sec-head"><h2>Mapa e ficha da cidade</h2><p class="muted">Arraste para mover. Para aproximar, use os botões ou Ctrl + roda do mouse (⌘ + roda no Mac). Clique em uma cidade para abrir a ficha ao lado; o site inteiro passa a mostrar aquela cidade.</p></div>
+    <div class="mapwrap">
+      <div class="card mapcard">
+        <div class="maptop"><b id="mapTitle" style="font-size:15px"></b>
+          <div style="display:flex;gap:8px;flex-wrap:wrap">
+            <select id="mLayer" aria-label="O que pintar no mapa">
+              <optgroup label="Selo de Qualidade"><option value="selo">Selo municipal calculado</option><option value="lider">Operadora com o maior IQS</option><option value="ind">Um indicador</option></optgroup>
+              <optgroup label="Rede de acesso"><option value="i4">IND4 médio de 2026</option><option value="i8">IND8 médio de 2026</option><option value="dec">DEC acumulado de 2026 (ANEEL)</option><option value="conf">IND4: meses com amostra significativa</option></optgroup>
+            </select>
+            <select id="mInd" aria-label="Indicador" hidden></select>
+          </div></div>
+        <div id="map"><div class="zoombtns"><button type="button" id="zIn" aria-label="Aproximar">+</button><button type="button" id="zOut" aria-label="Afastar">−</button><button type="button" id="zReset" aria-label="Ver o Brasil inteiro" style="font-size:12px">BR</button></div><div class="loading">Desenhando 5.570 municípios…</div></div>
+        <div class="mapleg legend" id="mapLegend"></div>
+      </div>
+      <div class="card side" id="side"></div>
+    </div>
+  </section>
+
+  <section id="metodo">
+    <div class="sec-head"><h2>Método e fontes</h2><p class="muted">O que é dado oficial, o que é calculado com a regra da Anatel e onde o cálculo usa aproximação.</p></div>
+    <div>
+      <details class="acc" open><summary>Dados oficiais, sem alteração</summary><div class="body">
+        <p>Anatel, base de indicadores RQUAL: resultados mensais dos 8 indicadores por município e operadora, com valores de referência, número de medições, erro amostral e marcação de amostra significativa (IND4 a IND7), e o indicador informativo INF4 (mediana de download por tecnologia).</p>
+        <p>Anatel: acessos da telefonia móvel por município (voz e dados, voz, dados), reclamações registradas na Anatel e cobertura 4G/5G (Meu Município). ANEEL: DEC mensal por conjunto elétrico, levado ao município pela média ponderada pelo número de consumidores. IBGE: malhas municipais e estaduais.</p>
+        <p>Pesquisa de Satisfação e Qualidade Percebida da Anatel, 11ª edição (jul/2025 a fev/2026): pós-pago Vivo 7,87, Claro 7,72, TIM 7,09; pré-pago Claro 8,02, Vivo 7,88, TIM 7,73. Selos nacionais publicados pela Anatel em dez/2025 (dados de jan a jun/2025): TIM C, Vivo B, Claro B.</p></div></details>
+      <details class="acc"><summary>Calculado com a regra da Anatel</summary><div class="body">
+        <p>Regra do Documento de Valores de Referência (DVR) vigente, Resolução Interna Anatel nº 444/2025, e do Manual Operacional do RQUAL, versão 3.1 (27/05/2026), conforme a página oficial do RQUAL. A tabela de referências conferida na página oficial vale para os ciclos de 2025 e 2026.</p>
+        <p>Nota de cada indicador, de 0 a 10: 10 × (média do semestre − mínimo) / (meta − mínimo), limitada entre 0 e 10. Pesos por posição: o indicador de menor nota pesa 36,7%; depois 18,4%, 12,3%, 9,2%, 7,4%, 6,1%, 5,3% e 4,6%. IQS municipal = 10 × soma(nota × peso), mais 5 de bônus com cobertura 4G ou superior de pelo menos 95%. IQS anual = média dos semestres. IQS estadual e nacional = média ponderada pelos acessos.</p>
+        <p>Faixas do IQS: 90 ou mais, faixa 1; 75, faixa 2; 60, faixa 3; acima de 40, faixa 4; abaixo, faixa 5. Faixas do IR na telefonia móvel: abaixo de 0,1; de 0,2; de 0,3; até 0,4; acima. Faixas do IQP: 9 ou mais; 7; 5; 3; abaixo. Selo estadual e nacional pela soma das três faixas: 3–4 A, 5–7 B, 8–10 C, 11–13 D, 14–15 E. Selo municipal pela faixa do IQS. O IR municipal existe na regra, mas não recebe faixa e não entra no selo municipal.</p>
+        <p>Validação: o cálculo reproduz os três selos nacionais publicados para jan a jun/2025.</p></div></details>
+      <details class="acc"><summary>Onde o cálculo usa aproximação</summary><div class="body">
+        <p><b>IR:</b> a regra usa as reclamações "qualificáveis", que não são publicadas separadamente. Aqui entram todas as reclamações de telefonia móvel registradas na Anatel.</p>
+        <p><b>Bônus de cobertura:</b> a regra usa a cobertura da área urbana; a base pública traz a cobertura de moradores, usada aqui.</p>
+        <p><b>IQP:</b> a regra usa o Índice de Satisfação Geral. Os valores de pós e pré-pago das três operadoras estão entre 7 e 9, então a faixa nacional é 2 qualquer que seja a forma de combiná-los. No selo estadual, a regra usa o ISG de cada UF, que não está nos dados usados aqui: entra a faixa nacional.</p>
+        <p><b>Oferta mínima do selo estadual:</b> a regra exige oferta em pelo menos 50% dos municípios da UF. Aqui a oferta é aproximada pela presença da operadora na base RQUAL do município.</p>
+        <p><b>Meta do IND8:</b> usamos 100%, valor da base de dados da Anatel; a tabela do DVR indica 99,99%. A diferença no IQS nacional é de até 0,03 ponto e não muda nenhum selo.</p>
+        <p><b>Período de 2026:</b> IQS e IR usam os mesmos meses, de janeiro até o último mês publicado dos indicadores. O 2º semestre de 2026 ainda está incompleto.</p></div></details>
+      <details class="acc"><summary>Simulações</summary><div class="body"><p>"Se o indicador estivesse na meta": aplica a mesma regra trocando a nota do indicador por 10 e reordenando os pesos, respeitando o teto de 100 do IQS. Mostra o efeito no IQS e no selo calculado. É conta, não previsão.</p></div></details>
+      <details class="acc"><summary>Rede de acesso: o que é calculado</summary><div class="body"><p>Médias de 2026 por cidade; quantos meses tiveram amostra significativa (marcação da Anatel), contando como "mais da metade" só quando passa de 50%; comparação com o melhor concorrente na mesma cidade; mês de pior IND8, o IND8 das outras operadoras e o DEC da cidade naquele mês, e a mediana mensal do DEC no ano.</p></div></details>
+    </div>
+  </section>
+</main>
+
+<footer><div class="container">
+  <span><b style="color:var(--ink)">Radar RQUAL</b> · Selo de Qualidade e rede de acesso da telefonia móvel com dados abertos.</span>
+  <span>Projeto independente de análise com dados públicos da Anatel, ANEEL e IBGE. Não é um canal oficial da Anatel nem de nenhuma operadora. "Selo calculado" não é o selo oficial: é a regra da Anatel aplicada aos dados abertos.</span>
+</div></footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/topojson-client@3.1.0/dist/topojson-client.min.js"></script>
+<script>
+const IND = ["IND1","IND2","IND3","IND4","IND5","IND6","IND7","IND8"];
+// Definições do Manual Operacional do RQUAL v3.1 (texto oficial) e cortes do DVR.
+const DEF = {
+  IND1: ["Este indicador expressa o desempenho da rede de acesso em relação ao atendimento de tentativas de conexão para chamadas de voz, tendo como objetivo representar a facilidade para que o usuário se conecte à rede de acesso móvel ao tentar realizar uma chamada de voz.", "Anexo 3", ""],
+  IND2: ["Este indicador expressa a capacidade da rede de acesso de retenção de chamadas de voz, tendo como objetivo representar a ineficiência da rede de acesso móvel, relacionada a ocorrência de desconexões de chamadas de voz não acionadas pelos usuários (queda de chamadas).", "Anexo 3", "Na tabela de referências, a meta (1%) é menor que o limite (3%)."],
+  IND3: ["Este indicador expressa o desempenho da rede de acesso para atendimento da demanda de conexão de dados, tendo como objetivo representar a facilidade para que o usuário acesse a rede de acesso móvel ao tentar realizar a conexão de dados.", "Anexo 3", ""],
+  IND4: ["Este indicador expressa a capacidade da rede em relação ao cumprimento das referências ou valores contratados de volume de dados transmitidos por segundo, tendo como objetivo representar o desempenho da rede em cumprir a velocidade utilizada como referência para cada tecnologia móvel.", "Anexo 5", "Corte em 2026: download de 7 Mbps e upload de 1,5 Mbps; a partir de 2027, download de 10 Mbps."],
+  IND5: ["Este indicador expressa o desempenho da rede em relação ao tempo de transmissão de pacotes de dados, tendo como objetivo representar o desempenho da rede em relação ao tempo em que um pacote de dados percorre a rede de um determinado ponto até seu destino e retorna à sua origem.", "Anexo 5", "Corte: 100 ms."],
+  IND6: ["Este indicador expressa o desempenho da rede em relação à variação do tempo de transmissão de pacotes de dados, tendo como objetivo representar o desempenho da rede em relação à variação do atraso na transmissão de pacotes sequenciais de dados, o que impacta nas transmissões em tempo real. A variação da latência também é chamada de jitter.", "Anexo 5", "Corte: 25 ms."],
+  IND7: ["Este indicador expressa a capacidade da rede de entregar os pacotes de dados ao destino sem ocorrência de perdas, tendo como objetivo representar o desempenho da rede em relação ao descarte de pacotes de dados enviados e não entregues no destino.", "Anexo 5", "Corte: 2%."],
+  IND8: ["Este indicador expressa o tempo em que o serviço está em operação, à disposição dos usuários sem interrupção, tendo como objetivo caracterizar e estabelecer as condições de acompanhamento e de controle do tempo em que os serviços estariam em operação, à disposição dos usuários, sem a afetação por conta da ocorrência de evento de interrupção.", "Anexo 7", "Meta de 100% conforme a base de dados da Anatel; a tabela do DVR indica 99,99%."],
+};
+const MENOR = { IND2: true };
+// Ordem alfabética em todo o site; a abertura não destaca nenhuma operadora (#tim, #vivo ou #claro no link escolhe outra).
+const OPS = ["CLARO", "TIM", "VIVO"];
+const OP_NOME = { TIM: "TIM", VIVO: "Vivo", CLARO: "Claro" };
+const LETRA = { 1: "A", 2: "B", 3: "C", 4: "D", 5: "E" };
+const UF_NOME = { AC: "Acre", AL: "Alagoas", AM: "Amazonas", AP: "Amapá", BA: "Bahia", CE: "Ceará", DF: "Distrito Federal", ES: "Espírito Santo", GO: "Goiás", MA: "Maranhão", MG: "Minas Gerais", MS: "Mato Grosso do Sul", MT: "Mato Grosso", PA: "Pará", PB: "Paraíba", PE: "Pernambuco", PI: "Piauí", PR: "Paraná", RJ: "Rio de Janeiro", RN: "Rio Grande do Norte", RO: "Rondônia", RR: "Roraima", RS: "Rio Grande do Sul", SC: "Santa Catarina", SE: "Sergipe", SP: "São Paulo", TO: "Tocantins" };
+const UF_COD = { 11: "RO", 12: "AC", 13: "AM", 14: "RR", 15: "PA", 16: "AP", 17: "TO", 21: "MA", 22: "PI", 23: "CE", 24: "RN", 25: "PB", 26: "PE", 27: "AL", 28: "SE", 29: "BA", 31: "MG", 32: "ES", 33: "RJ", 35: "SP", 41: "PR", 42: "SC", 43: "RS", 50: "MS", 51: "MT", 52: "GO", 53: "DF" };
+const SELO_PUB = { periodo: "jan a jun/2025", TIM: "C", VIVO: "B", CLARO: "B" };
+const PASSO = 15;
+const NAV = {
+  selo: [["visao", "Visão geral"], ["indicadores", "Indicadores"], ["evolucao", "Evolução"], ["mapa", "Mapa"], ["estados", "Estados"], ["cidades", "Cidades"], ["metodo", "Método"]],
+  acesso: [["avisao", "Visão geral"], ["ind4", "IND4"], ["ind8", "IND8"], ["mapa", "Mapa"], ["metodo", "Método"]],
+};
+
+const st = { area: "selo", per: "atual", op: OPS[0], uf: "", mun: null, layer: "selo", mapInd: "IND4", openInd: null, hidden: new Set(), conf: true,
+  R: null, A: null, data: {}, byId: {}, byIdA: new Map(), ufCache: new Map(), cSort: "grandes", nC: PASSO, s4: "imp", d4: "", s8: "imp", n4: PASSO, n8: PASSO };
+const $ = id => document.getElementById(id);
+const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const fmt = (v, d = 1) => v == null || isNaN(v) ? "–" : (+v).toLocaleString("pt-BR", { minimumFractionDigits: d, maximumFractionDigits: d });
+const int = v => v == null ? "–" : Math.round(v).toLocaleString("pt-BR");
+const cid = n => `${int(n)} cidade${n === 1 ? "" : "s"}`;
+const semLbl = s => `${s % 10}º sem. ${Math.floor(s / 10)}`;
+const mesLbl = v => `${["jan","fev","mar","abr","mai","jun","jul","ago","set","out","nov","dez"][v % 100 - 1]}/${String(Math.floor(v / 100)).slice(2)}`;
+const isoMes = s => s ? mesLbl(+s.replace("-", "")) : "–";
+const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const opCor = op => css({ TIM: "--op-tim", VIVO: "--op-vivo", CLARO: "--op-claro" }[op]);
+const opFill = op => css({ TIM: "--opf-tim", VIVO: "--opf-vivo", CLARO: "--opf-claro" }[op]);
+const faixaIqs = v => v >= 90 ? 1 : v >= 75 ? 2 : v >= 60 ? 3 : v > 40 ? 4 : 5;
+const faixaIqp = v => v >= 9 ? 1 : v >= 7 ? 2 : v >= 5 ? 3 : v >= 3 ? 4 : 5;
+const seloDe = s => s <= 4 ? "A" : s <= 7 ? "B" : s <= 10 ? "C" : s <= 13 ? "D" : "E";
+const seloCor = l => css({ A: "--q1", B: "--q2", C: "--q3", D: "--q4", E: "--q5" }[l] || "--q-na");
+const seloInk = l => l === "A" ? "#fff" : "#1a1a1a";
+const pill = l => l ? `<span class="pill" style="background:${seloCor(l)};color:${seloInk(l)}">${l}</span>` : "–";
+const seloMove = (f, nf) => `<span class="seal-move">${pill(LETRA[f])}${nf !== f ? ` → ${pill(LETRA[nf])}` : ""}</span>`;
+const indFmt = (ind, v) => v == null ? "–" : `${fmt(v, ind === "IND2" || ind === "IND8" ? 2 : 1)}%`;
+const vBad = (txt, bad) => bad ? `<span class="bad">${txt}</span>` : txt;
+const normDe = (ind, v) => { const vr = st.R.indicadores[ind]; return v == null ? null : Math.max(0, Math.min(10, 10 * (v - vr.inf) / (vr.sup - vr.inf))); };
+const nomeInd = ind => st.R.indicadores[ind].descricao;
+const trunc = (s, n) => s.length > n ? s.slice(0, n - 1) + "…" : s;
+const per = () => st.R.periodos.find(p => p.id === st.per);
+const list = (id = st.per) => st.data[id] || [];
+const byId = (id, p = st.per) => st.byId[p]?.get(id);
+const scope = () => list().filter(m => !st.uf || m.uf === st.uf);
+const scopeA = () => st.A.municipios.filter(m => !st.uf || m.uf === st.uf);
+const scopeName = () => st.mun ? (byId(st.mun) || st.byIdA.get(st.mun))?.nome : st.uf ? UF_NOME[st.uf] : "Brasil";
+const consol = () => st.uf ? per().consolidado.UF[st.uf] : per().consolidado.BR;
+const fIqp = op => faixaIqp(Math.min(...st.R.isg[op]));
+const seloOp = (C, o) => { const c = C?.[o]; if (!c) return null; const fq = fIqp(o); return { ...c, fq, soma: c.f_iqs + c.f_ir + fq, sel: seloDe(c.f_iqs + c.f_ir + fq) }; };
+const quando = () => { const p = per(); return p.id === "atual" ? `em ${p.nome} (até ${isoMes(st.R.fontes.rqual)})` : p.id === "semestre" ? `no ${p.nome}` : `em ${p.nome}`; };
+const anoA = () => `${mesLbl(st.A.meses_ano[0])} a ${mesLbl(st.A.meses_ano.at(-1))}`;
+const confiavel = o => (o.s4 ?? 0) > 0.5;
+const amostra = o => o.n4 ? `<span class="tag ${confiavel(o) ? "ok" : ""}" title="${int(o.m4)} medições no ano · erro amostral médio ${fmt(o.e4, 1)} p.p.">${o.k4} de ${o.n4} meses</span>` : "–";
+const conc8 = o => Object.entries(o.c8 || {}).map(([x, v]) => `${OP_NOME[x]} ${fmt(v, 2)}%`).join(" · ") || "–";
+const best = (m, key, op) => OPS.filter(o => o !== op && m[o] && m[o][key] != null).map(o => ({ o, v: m[o][key] })).sort((a, b) => b.v - a.v)[0];
+const diag4 = (m, op) => { const o = m[op], b = best(m, "i4", op); if (!o || o.i4 == null || !b) return null; return b.v - o.i4 >= 5 ? "nosso" : b.v < 80 && o.i4 < 80 ? "todos" : null; };
+const cityBtn = (m, extra = "") => `<button type="button" class="linkbtn" data-id="${m.id}">${esc(m.nome)}</button> <span class="muted">${m.uf}</span>${extra}`;
+
+async function loadPer(id) { if (!st.data[id]) { const a = await fetch(`data/municipios_${id}.json`).then(r => r.json()); st.data[id] = a; st.byId[id] = new Map(a.map(m => [m.id, m])); } }
+async function ufData(uf) { if (!st.ufCache.has(uf)) st.ufCache.set(uf, fetch(`data/uf/${uf}.json`).then(r => r.json())); return st.ufCache.get(uf); }
+
+async function load() {
+  [st.R, st.A] = await Promise.all([fetch("data/resumo.json").then(r => r.json()), fetch("data/acesso.json").then(r => r.json())]);
+  st.A.municipios.forEach(m => st.byIdA.set(m.id, m));
+  await loadPer(st.per);
+  const F = st.R.fontes;
+  $("fPer").innerHTML = st.R.periodos.map(p => `<button type="button" data-per="${p.id}" aria-pressed="${p.id === st.per}" title="${esc(p.detalhe)}">${esc(p.nome)}</button>`).join("");
+  $("fixedPer").textContent = `Período: ${anoA()}`;
+  $("fresh").textContent = `Dados mais recentes publicados: indicadores de qualidade até ${isoMes(F.rqual)} · acessos até ${isoMes(F.acessos)} · reclamações até ${isoMes(F.reclamacoes)} · energia (ANEEL) até ${isoMes(F.energia)} · cobertura 4G de ${isoMes(F.cobertura)}. Os cálculos de 2026 usam os meses até ${isoMes(F.rqual)}.`;
+  $("fUf").insertAdjacentHTML("beforeend", Object.keys(UF_NOME).sort().map(u => `<option value="${u}">${UF_NOME[u]}</option>`).join(""));
+  $("munList").innerHTML = list().map(m => `<option value="${esc(m.nome)} - ${m.uf}"></option>`).join("");
+  $("mInd").innerHTML = IND.map(i => `<option value="${i}" ${i === st.mapInd ? "selected" : ""}>${i} · ${esc(nomeInd(i))}</option>`).join("");
+  const tags = location.hash.slice(1).toLowerCase().split(/[&+,-]/), opHash = OPS.find(o => tags.includes(o.toLowerCase()));
+  if (opHash) { st.op = opHash; setTheme(opHash); document.querySelectorAll("#fOp button").forEach(x => x.setAttribute("aria-pressed", x.dataset.op === opHash)); }
+  setArea(tags.includes("acesso") ? "acesso" : "selo", false);
+  await renderAll();
+  drawMap();
+}
+
+function setTheme(op) { document.documentElement.dataset.op = op; }
+function syncHash() {
+  const h = [st.area === "acesso" && "acesso", document.documentElement.dataset.op && st.op.toLowerCase()].filter(Boolean).join("-");
+  try { history.replaceState(null, "", h ? `#${h}` : location.pathname + location.search); } catch (e) {}
+}
+function setArea(area, render = true) {
+  st.area = area;
+  document.querySelectorAll("#fArea button").forEach(b => { const on = b.dataset.area === area; b.setAttribute("aria-selected", on); b.tabIndex = on ? 0 : -1; });
+  document.querySelectorAll("main > section[data-area]").forEach(s => { s.hidden = s.dataset.area !== area; });
+  $("navLinks").innerHTML = NAV[area].map(([id, l]) => `<a href="#${id}">${l}</a>`).join("");
+  $("fPer").hidden = area !== "selo"; $("fixedPer").hidden = area !== "acesso"; $("confWrap").hidden = area !== "acesso";
+  if (area === "selo") {
+    $("heroKicker").textContent = "Selo de Qualidade Anatel · telefonia móvel";
+    $("heroTitle").textContent = "O Selo de Qualidade da telefonia móvel, do Brasil a cada cidade";
+    $("heroLead").innerHTML = "Claro, TIM e Vivo lado a lado no selo da Anatel, que soma três faixas: <b>IQS</b> (nota técnica da rede, de 0 a 100, feita com 8 indicadores), <b>IR</b> (reclamações na Anatel por mil acessos) e <b>IQP</b> (nota da pesquisa de satisfação da Anatel).";
+    if (!["selo", "lider", "ind"].includes(st.layer)) st.layer = "selo";
+  } else {
+    $("heroKicker").textContent = "Selo de Qualidade Anatel · rede de acesso";
+    $("heroTitle").textContent = "Velocidade e disponibilidade da rede móvel, cidade a cidade";
+    $("heroLead").innerHTML = "Dois dos 8 indicadores do IQS em detalhe: <b>IND4</b> (cumprimento de velocidade de download e upload) e <b>IND8</b> (disponibilidade), comparando Claro, TIM e Vivo em cada município, com as medições oficiais de 2026.";
+    if (!["i4", "i8", "dec", "conf"].includes(st.layer)) st.layer = "i4";
+  }
+  $("mLayer").value = st.layer; $("mInd").hidden = st.layer !== "ind"; st.hidden.clear();
+  syncHash();
+  if (render) renderAll();
+}
+
+async function renderAll() {
+  const m = st.mun && (byId(st.mun) || st.byIdA.get(st.mun));
+  $("scopeChip").innerHTML = st.uf || st.mun ? `<span class="chip">${esc(m ? `${m.nome} · ${m.uf}` : UF_NOME[st.uf])}<button type="button" id="clr" aria-label="Voltar para o Brasil inteiro">×</button></span>` : "";
+  $("clr")?.addEventListener("click", () => setScope("", null));
+  $("fUf").value = st.uf; $("fMun").value = m ? `${m.nome} - ${m.uf}` : "";
+  if (st.area === "selo") {
+    st.ser = await monthly();
+    renderTilesSelo(); renderVisao(); renderInd(); renderGain(); await renderEvo(); renderUf(); await renderCidades();
+  } else {
+    renderTilesAcesso(); await renderChartsA(); renderScatter(); renderT4(); renderT8();
+  }
+  await renderSide();
+  if (st.mapReady) paintMap();
+}
+
+/* ================= Área Selo ================= */
+function renderTilesSelo() {
+  const op = st.op, P = per();
+  if (st.mun) {
+    const m = byId(st.mun), o = m?.[op];
+    const pos = o ? OPS.filter(x => m[x]?.iqs != null).sort((a, b) => m[b].iqs - m[a].iqs).indexOf(op) + 1 : null;
+    $("tiles").innerHTML = o ? `
+      <div class="tile"><span class="v">${pill(LETRA[o.f])}</span><span class="l">Selo municipal calculado · ${OP_NOME[op]}</span><span class="s">${P.nome} · faixa ${o.f} do IQS</span></div>
+      <div class="tile"><span class="v">${fmt(o.iqs, 1)}</span><span class="l">IQS calculado</span><span class="s">${o.ant != null ? `período anterior: ${fmt(o.ant, 1)}` : "sem período anterior"}${o.b ? " · inclui bônus de cobertura" : ""}</span></div>
+      <div class="tile"><span class="v">${pos}º <small>de ${OPS.filter(x => m[x]?.iqs != null).length}</small></span><span class="l">posição pelo IQS calculado</span><span class="s">entre as operadoras na cidade</span></div>
+      <div class="tile"><span class="v">${int(o.a)}</span><span class="l">média mensal de acessos da ${OP_NOME[op]}</span><span class="s">no período, Anatel</span></div>` : `<div class="tile"><span class="l">A ${OP_NOME[op]} não tem dados nesta cidade.</span></div>`;
+    return;
+  }
+  const c = seloOp(consol(), op);
+  $("tiles").innerHTML = `
+    <div class="tile"><span class="v">${c ? pill(c.sel) : "–"} <small>soma ${c ? `${c.f_iqs} + ${c.f_ir} + ${c.fq}` : "–"}</small></span><span class="l">Selo ${st.uf ? "estadual" : "nacional"} calculado · ${OP_NOME[op]}</span><span class="s">${P.nome} · faixas de IQS + IR + IQP</span></div>
+    <div class="tile"><span class="v">${c ? fmt(c.iqs, 1) : "–"} <small>faixa ${c?.f_iqs ?? "–"}</small></span><span class="l">IQS calculado</span><span class="s">nota técnica da rede · ${scopeName()}</span></div>
+    <div class="tile"><span class="v">${c ? fmt(c.ir, 2) : "–"} <small>faixa ${c?.f_ir ?? "–"}</small></span><span class="l">IR calculado</span><span class="s">reclamações por mil acessos · ${scopeName()}</span></div>
+    <div class="tile"><span class="v">${pill(SELO_PUB[op])}</span><span class="l">Selo nacional publicado pela Anatel</span><span class="s">${OP_NOME[op]} · ${SELO_PUB.periodo}</span></div>`;
+}
+
+function renderVisao() {
+  const op = st.op;
+  $("visTitle").textContent = `Visão geral · ${scopeName()}`;
+  if (st.mun) {
+    const m = byId(st.mun);
+    $("headline").innerHTML = `Em <b>${esc(m.nome)}</b>, ${quando()}, os selos municipais calculados são ${OPS.filter(o => m[o]?.iqs != null).map(o => `${OP_NOME[o]} <b>${LETRA[m[o].f]}</b> (IQS ${fmt(m[o].iqs, 1)})`).join(", ")}.`;
+    $("opCards").innerHTML = OPS.map(o => { const x = m[o]; if (!x || x.iqs == null) return `<div class="card opcard"><span class="nm"><i style="background:${opFill(o)}"></i>${OP_NOME[o]}</span><span class="muted small">Sem dados nesta cidade.</span></div>`;
+      const k = worstK(x);
+      return `<div class="card opcard ${o === op ? "focus" : ""}"><div class="hd"><div class="badge" style="background:${seloCor(LETRA[x.f])};color:${seloInk(LETRA[x.f])}">${LETRA[x.f]}</div><div style="display:grid;gap:2px"><span class="nm"><i style="background:${opFill(o)}"></i>${OP_NOME[o]}</span><span class="small muted">selo municipal calculado · faixa ${x.f}</span></div></div>
+        <div class="parts" style="grid-template-columns:repeat(2,minmax(0,1fr))"><div class="part"><span class="l">IQS calculado</span><span class="v">${fmt(x.iqs, 1)}</span><span class="f">${x.b ? "inclui bônus de cobertura" : "sem bônus de cobertura"}</span></div><div class="part"><span class="l">Média mensal de acessos</span><span class="v">${int(x.a)}</span><span class="f">Anatel</span></div></div>
+        <span class="small">Indicador de menor nota: ${k >= 0 ? `<b>${IND[k]}</b> ${esc(nomeInd(IND[k]).toLowerCase())}, ${indFmt(IND[k], x.v[k])} (nota ${fmt(x.n[k], 1)} de 10)` : "–"}</span></div>`; }).join("");
+    $("pubStrip").innerHTML = `<span>O selo municipal depende só do IQS. Selos nacionais publicados pela Anatel (${SELO_PUB.periodo}):</span> ${OPS.map(o => `${OP_NOME[o]} ${pill(SELO_PUB[o])}`).join(" ")}`;
+    renderGapMun(m); return;
+  }
+  const C = consol(), cs = OPS.map(o => [o, seloOp(C, o)]).filter(([, c]) => c);
+  const me = seloOp(C, op);
+  const longe = me ? [["IQS", me.f_iqs], ["IR", me.f_ir], ["IQP", me.fq]].sort((a, b) => b[1] - a[1])[0] : null;
+  $("headline").innerHTML = `${st.uf ? `Em ${UF_NOME[st.uf]}` : "No Brasil"}, ${quando()}, o selo ${st.uf ? "estadual" : "nacional"} calculado é ${cs.map(([o, c]) => `${OP_NOME[o]} <b>${c.sel}</b>`).join(", ")}.${me && longe ? ` Na ${OP_NOME[op]}, o índice na pior faixa é o <b>${longe[0]}</b> (faixa ${longe[1]}).` : ""}`;
+  $("opCards").innerHTML = OPS.map(o => { const c = seloOp(C, o); if (!c) return `<div class="card opcard"><span class="nm"><i style="background:${opFill(o)}"></i>${OP_NOME[o]}</span><span class="muted small">Sem dado neste recorte.</span></div>`;
+    const [pos, pre] = st.R.isg[o];
+    return `<div class="card opcard ${o === op ? "focus" : ""}"><div class="hd"><div class="badge" style="background:${seloCor(c.sel)};color:${seloInk(c.sel)}">${c.sel}</div><div style="display:grid;gap:2px"><span class="nm"><i style="background:${opFill(o)}"></i>${OP_NOME[o]}</span><span class="small muted">soma das faixas ${c.f_iqs} + ${c.f_ir} + ${c.fq} = <b>${c.soma}</b></span></div></div>
+      <div class="parts"><div class="part"><span class="l">IQS · rede</span><span class="v">${fmt(c.iqs, 1)}</span><span class="f">faixa ${c.f_iqs}</span></div><div class="part"><span class="l">IR · reclamações</span><span class="v">${fmt(c.ir, 2)}</span><span class="f">faixa ${c.f_ir}</span></div><div class="part"><span class="l">IQP · satisfação</span><span class="v">faixa ${c.fq}</span><span class="f">pós ${fmt(pos, 2)} · pré ${fmt(pre, 2)}</span></div></div></div>`; }).join("");
+  const ok = st.R.validacao.every(x => x.calculado === x.publicado);
+  $("pubStrip").innerHTML = `<span>Selos nacionais publicados pela Anatel (${SELO_PUB.periodo}):</span> ${OPS.map(o => `${OP_NOME[o]} ${pill(SELO_PUB[o])}`).join(" ")} <span class="muted">${ok ? "O cálculo deste site reproduz esses três selos." : ""}</span>`;
+  renderGap(C);
+}
+function worstK(x) { let k = -1; x.n.forEach((v, i) => { if (v != null && (k < 0 || v < x.n[k])) k = i; }); return k; }
+
+function renderGap(C) {
+  const op = st.op, c = seloOp(C, op);
+  if (!c) { $("gapCard").innerHTML = ""; return; }
+  const iqsThr = [null, null, 90, 75, 60, 40.0001][c.f_iqs], irThr = [null, null, 0.1, 0.2, 0.3, 0.4][c.f_ir];
+  const rows = [
+    ["IQS · nota da rede", fmt(c.iqs, 1), c.f_iqs, c.f_iqs > 1 ? `chegar a ${fmt(iqsThr, 0)} (+${fmt(iqsThr - c.iqs, 1)})` : "já na faixa 1"],
+    ["IR · reclamações por mil acessos", fmt(c.ir, 3), c.f_ir, c.f_ir > 1 ? `ficar abaixo de ${fmt(irThr, 1)} (redução de mais de ${fmt(100 * (1 - irThr / c.ir), 1)}%)` : "já na faixa 1"],
+    ["IQP · satisfação", `pós ${fmt(st.R.isg[op][0], 2)} · pré ${fmt(st.R.isg[op][1], 2)}`, c.fq, c.fq > 1 ? "nota de satisfação de 9 ou mais" : "já na faixa 1"],
+  ];
+  const lim = { A: null, B: 4, C: 7, D: 10, E: 13 }[c.sel], falta = lim == null ? 0 : c.soma - lim;
+  const podem = rows.filter(r => r[2] > 1).length;
+  $("gapCard").innerHTML = `<div style="display:grid;gap:12px"><h3>O que separa a ${OP_NOME[op]} do próximo selo${st.uf ? ` em ${UF_NOME[st.uf]}` : ""}</h3>
+    <p>${lim == null ? "O selo calculado já é A." : `Para o selo <b>${seloDe(lim)}</b>, a soma das faixas precisa cair de <b>${c.soma}</b> para <b>${lim}</b>: ${falta === 1 ? "basta um dos índices abaixo subir uma faixa" : `são <b>${falta}</b> faixas a menos, somando os índices que ainda podem subir (${podem} de 3)`}.`} <span class="muted small">Aritmética das faixas da Anatel sobre os valores calculados ${quando()}.</span></p>
+    <div class="tbl-wrap" style="box-shadow:none"><table><thead><tr><th>Índice</th><th class="r">Valor</th><th class="c">Faixa</th><th>Para subir uma faixa</th></tr></thead><tbody>${rows.map(r => `<tr><td><b>${r[0]}</b></td><td class="r num">${r[1]}</td><td class="c">${r[2]}</td><td>${r[3]}</td></tr>`).join("")}</tbody></table></div></div>`;
+}
+function renderGapMun(m) {
+  const op = st.op, x = m[op];
+  if (!x || x.iqs == null) { $("gapCard").innerHTML = ""; return; }
+  const thr = [null, null, 90, 75, 60, 40.0001][x.f], down = [90, 75, 60, 40.0001][x.f - 1];
+  $("gapCard").innerHTML = `<div style="display:grid;gap:8px"><h3>Margem do selo municipal calculado da ${OP_NOME[op]}</h3>
+    <p>${x.f > 1 ? `Para subir para o selo ${LETRA[x.f - 1]}, o IQS precisa chegar a <b>${fmt(thr, 0)}</b> (+${fmt(thr - x.iqs, 1)}).` : "Já está no selo A."} ${x.f < 5 ? `Ficaria no selo ${LETRA[x.f + 1]} com IQS abaixo de <b>${fmt(down, 0)}</b> (margem de ${fmt(x.iqs - down, 1)}).` : ""}</p></div>`;
+}
+
+async function monthly() {
+  const R = st.R, vazio = () => IND.map(() => R.meses.map(() => null));
+  if (!st.mun) { const M = R.mensal[st.uf || "BR"] || {}; return OPS.reduce((o, op) => (o[op] = IND.map(i => M[op]?.[i] || R.meses.map(() => null)), o), {}); }
+  const m = byId(st.mun) || st.byIdA.get(st.mun), d = (await ufData(m.uf))[st.mun] || {};
+  return OPS.reduce((o, op) => (o[op] = d[op]?.m || vazio(), o), {});
+}
+const lastVal = a => { for (let i = a.length - 1; i >= 0; i--) if (a[i] != null) return a[i]; return null; };
+function renderInd() {
+  const R = st.R, ser = st.ser, op = st.op;
+  $("indSub").textContent = `Valores de ${mesLbl(R.meses.at(-1))}, o mês mais recente publicado pela Anatel, em ${scopeName()}. A barra vai do mínimo (vazia) à meta (cheia); ▼ marca nota abaixo de 8 de 10. Clique em um indicador para ver a definição oficial e as três operadoras mês a mês.`;
+  const norms = IND.map((ind, k) => normDe(ind, lastVal(ser[op][k])));
+  let wk = -1; norms.forEach((v, k) => { if (v != null && (wk < 0 || v < norms[wk])) wk = k; });
+  if (!st.openInd) st.openInd = IND[wk >= 0 ? wk : 5];
+  $("indGrid").innerHTML = IND.map((ind, k) => {
+    const vr = R.indicadores[ind];
+    const rows = OPS.map(o => { const v = lastVal(ser[o][k]), n = normDe(ind, v);
+      return `<div class="oprow ${o === op ? "focus" : ""}"><span class="on"><i style="background:${opFill(o)}"></i>${OP_NOME[o]}</span><span class="track"><span style="width:${n == null ? 0 : n * 10}%;background:${opFill(o)}"></span></span><span class="val">${vBad(indFmt(ind, v), n != null && n < 8)}</span></div>`; }).join("");
+    return `<button type="button" class="indcard" data-ind="${ind}" aria-pressed="${st.openInd === ind}">
+      <div class="top"><span class="name">${esc(nomeInd(ind))}</span><span class="code">${ind}</span></div>
+      <span class="meta">${MENOR[ind] ? `meta ${fmt(vr.sup, 0)}% · limite ${fmt(vr.inf, 0)}%` : `meta ${fmt(vr.sup, vr.sup % 1 ? 2 : 0)}% · mínimo ${fmt(vr.inf, 0)}%`}</span>
+      ${rows}<div class="chart spark" data-k="${k}" aria-hidden="true"></div>
+      ${k === wk && norms[k] < 9.95 ? `<span class="small" style="font-weight:600">Menor nota da ${OP_NOME[op]} em ${mesLbl(R.meses.at(-1))}: na regra, o indicador de menor nota pesa 36,7%</span>` : ""}
+    </button>`;
+  }).join("");
+  document.querySelectorAll("#indGrid .spark").forEach(el => spark(el, +el.dataset.k));
+  renderIndDetail();
+}
+function spark(el, k) {
+  const R = st.R, W = 240, H = 38, ser = st.ser, all = OPS.flatMap(o => ser[o][k]).filter(v => v != null);
+  if (!all.length) { el.innerHTML = ""; return; }
+  const lo = Math.min(...all), hi = Math.max(...all), pad = Math.max((hi - lo) * 0.1, 0.2);
+  const x = d3.scaleLinear().domain([0, R.meses.length - 1]).range([2, W - 2]), y = d3.scaleLinear().domain([lo - pad, hi + pad]).range([H - 2, 2]);
+  const line = d3.line().defined(d => d != null).x((d, i) => x(i)).y(d => y(d)).curve(d3.curveMonotoneX);
+  el.innerHTML = `<svg viewBox="0 0 ${W} ${H}" width="100%" height="${H}" preserveAspectRatio="none">${OPS.slice().sort((a, b) => (a === st.op) - (b === st.op)).map(o => `<path d="${line(ser[o][k]) || ""}" fill="none" stroke="${opCor(o)}" stroke-width="${o === st.op ? 2.4 : 1.4}" vector-effect="non-scaling-stroke" opacity="${o === st.op ? 1 : .7}"/>`).join("")}</svg>`;
+}
+function renderIndDetail() {
+  const ind = st.openInd, k = IND.indexOf(ind), R = st.R, vr = R.indicadores[ind], [def, anexo, extra] = DEF[ind];
+  $("indDetail").innerHTML = `<div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:baseline"><h3>${esc(nomeInd(ind))} · ${ind} · ${esc(scopeName())}</h3><span class="small muted">Tracejado: meta e ${MENOR[ind] ? "limite" : "mínimo"} de ${st.R.periodos[0].nome}</span></div>
+    <div class="def"><span><b>Definição oficial</b> (Manual Operacional do RQUAL v3.1, ${anexo}): <q>${def}</q></span>${extra ? `<span>${extra}</span>` : ""}</div>
+    <div class="legend">${OPS.map(o => `<span><i class="ln" style="background:${opCor(o)}"></i>${OP_NOME[o]}</span>`).join("")}</div><div class="chart" id="chInd"></div>
+    <p class="chartnote">Os valores de referência mudam entre ciclos. As linhas tracejadas mostram os de ${st.R.periodos[0].nome}; nos meses de anos anteriores, a meta e o mínimo podem ter sido outros.</p>`;
+  const s = OPS.map(o => ({ name: OP_NOME[o], color: opCor(o), bold: o === st.op, points: R.meses.map((m, i) => ({ x: m, y: st.ser[o][k][i] })) }));
+  const all = s.flatMap(z => z.points.map(p => p.y)).filter(v => v != null);
+  if (!all.length) { $("chInd").innerHTML = `<p class="small muted">Sem dados neste recorte.</p>`; return; }
+  const lo = Math.min(...all), hi = Math.max(...all);
+  const dom = MENOR[ind] ? [0, Math.max(hi, vr.inf) * 1.1] : [Math.max(0, Math.min(lo, vr.inf) - 1), Math.min(100, Math.max(hi, vr.sup) + 0.5)];
+  lineChart($("chInd"), { series: s, xs: R.meses, yDomain: dom, refs: [{ y: vr.sup, label: `meta ${fmt(vr.sup, vr.sup % 1 ? 2 : 0)}%`, color: "--ink-2" }, { y: vr.inf, label: `${MENOR[ind] ? "limite" : "mínimo"} ${fmt(vr.inf, 0)}%`, color: "--ink-2", dash: "2 4" }], height: 280, fmtY: v => fmt(v, dom[1] - dom[0] < 5 ? 1 : 0), tipFmt: v => indFmt(ind, v) });
+}
+function gains(op) {
+  const L = scope().filter(m => m[op] && m[op].iqs != null && m[op].a > 0 && m[op].g), tot = d3.sum(L, m => m[op].a);
+  return IND.map((ind, k) => ({ ind, v: tot ? d3.sum(L, m => m[op].g[k] * m[op].a) / tot : 0 }));
+}
+function renderGain() {
+  const op = st.op, el = $("chGain"), data = st.mun ? (() => { const x = byId(st.mun)?.[op]; return IND.map((ind, k) => ({ ind, v: x?.g ? x.g[k] : 0 })); })() : gains(op);
+  $("gainSub").textContent = `Simulação pela regra da Anatel: quanto o IQS calculado da ${OP_NOME[op]} ${st.mun ? "na cidade" : `em ${scopeName()}`} subiria se aquele indicador estivesse na meta${st.mun ? "" : " em todas as cidades"}, mantendo os demais e respeitando o teto de 100. Mostra o peso de cada indicador na nota; não é previsão.`;
+  el.innerHTML = "";
+  const W = Math.max(300, el.clientWidth || 600), rowH = 32, H = data.length * rowH + 6, ml = Math.min(300, W * 0.48), mr = 64, chars = Math.floor(ml / 7.2);
+  const x = d3.scaleLinear().domain([0, Math.max(1, d3.max(data, d => d.v))]).range([ml, W - mr]);
+  const svg = d3.select(el).append("svg").attr("viewBox", `0 0 ${W} ${H}`).attr("width", "100%").attr("role", "img").attr("aria-label", "Ganho no IQS por indicador");
+  const top = d3.max(data, d => d.v);
+  const g = svg.selectAll("g").data(data).join("g").attr("transform", (d, i) => `translate(0,${i * rowH + 3})`);
+  g.append("title").text(d => `${d.ind} · ${nomeInd(d.ind)}: +${fmt(d.v, 2)}`);
+  g.append("text").attr("x", ml - 10).attr("y", 18).attr("text-anchor", "end").style("fill", css("--ink-2")).style("font-size", "12.5px").text(d => trunc(`${d.ind} · ${nomeInd(d.ind)}`, chars));
+  g.append("rect").attr("x", ml).attr("y", 7).attr("height", 14).attr("rx", 4).attr("width", d => Math.max(2, x(d.v) - ml)).attr("fill", d => d.v === top && top > 0 ? css("--accent") : css("--line-2"));
+  g.append("text").attr("x", d => x(d.v) + 8).attr("y", 19).style("fill", css("--ink")).style("font-weight", 600).style("font-size", "12.5px").text(d => `+${fmt(d.v, 2)}`);
+}
+
+async function renderEvo() {
+  const R = st.R, op = st.op;
+  legOps($("legE1"), true); legOps($("legE2"), true);
+  if (st.mun) {
+    const m = byId(st.mun), d = (await ufData(m.uf))[st.mun] || {};
+    $("evoSub").textContent = `${m.nome}: IQS municipal calculado por semestre. O IR municipal existe na regra, mas não recebe faixa e não entra no selo municipal; ele é mostrado aqui só por estado e Brasil.`;
+    const sems = [...new Set(OPS.flatMap(o => d[o]?.s || []))].sort();
+    const s = OPS.filter(o => d[o]?.s).map(o => ({ name: OP_NOME[o], color: opCor(o), bold: o === op, points: sems.map(x => { const i = d[o].s.indexOf(x); return { x, y: i >= 0 ? d[o].iqs[i] : null }; }) }));
+    const lo = Math.min(60, ...s.flatMap(z => z.points.map(p => p.y ?? 100)));
+    if (sems.length) lineChart($("chE1"), { series: s, xs: sems, yDomain: [Math.max(0, lo - 5), 100], refs: [{ y: 90, label: "faixa 1 (A)" }, { y: 75, label: "faixa 2 (B)" }, { y: 60, label: "faixa 3 (C)" }], partialFrom: R.semestre_parcial, xLabel: semLbl, tipFmt: v => fmt(v, 1) });
+    $("chE2").innerHTML = `<p class="small muted">Selecione um estado ou o Brasil para ver o IR.</p>`; return;
+  }
+  const src = st.uf ? (R.serie_uf[st.uf] || []) : R.serie, sems = [...new Set(src.map(s => s.semestre))].sort();
+  $("evoSub").textContent = `${scopeName()}: cada ponto é um semestre calculado com a regra da Anatel. O trecho tracejado é o semestre em andamento, com os meses já publicados.`;
+  const mk = key => OPS.map(o => ({ name: OP_NOME[o], color: opCor(o), bold: o === op, points: sems.map(s => { const r = src.find(x => x.prestadora === o && x.semestre === s); return { x: s, y: r ? r[key] : null }; }) }));
+  const a = mk("iqs"), lo = Math.min(...a.flatMap(s => s.points.map(p => p.y ?? 100)));
+  lineChart($("chE1"), { series: a, xs: sems, yDomain: [Math.min(75, Math.floor(lo - 2)), 100], refs: [{ y: 90, label: "faixa 1" }, { y: 75, label: "faixa 2" }], partialFrom: R.semestre_parcial, xLabel: semLbl, tipFmt: v => fmt(v, 1) });
+  const b = mk("ir"), hi = Math.max(0.45, ...b.flatMap(s => s.points.map(p => p.y ?? 0)));
+  lineChart($("chE2"), { series: b, xs: sems, yDomain: [0, hi], refs: [{ y: 0.2, label: "limite faixa 2 | 3" }, { y: 0.3, label: "limite faixa 3 | 4" }, { y: 0.4, label: "limite faixa 4 | 5" }], partialFrom: R.semestre_parcial, xLabel: semLbl, fmtY: v => fmt(v, 1), tipFmt: v => fmt(v, 3) });
+}
+
+function renderUf() {
+  const P = per(), op = st.op, todos = list();
+  const oferta = (uf, o) => { const L = todos.filter(m => m.uf === uf); return L.length ? L.filter(m => m[o]?.iqs != null).length / L.length : 0; };
+  const rows = Object.entries(P.consolidado.UF).filter(([, v]) => v[op]).map(([uf, v]) => ({ uf, me: seloOp(v, op), of: oferta(uf, op), ot: OPS.filter(o => o !== op).map(o => [o, v[o] ? seloOp(v, o) : null, oferta(uf, o)]) })).sort((a, b) => b.me.soma - a.me.soma || a.me.iqs - b.me.iqs);
+  const cel = (c, of) => !c ? "–" : of < 0.5 ? `<span class="small muted" title="Presença em ${fmt(100 * of, 0)}% dos municípios">sem selo¹</span>` : pill(c.sel);
+  $("ufTbl").innerHTML = `<thead><tr><th>Estado</th><th class="c">${OP_NOME[op]}</th>${OPS.filter(o => o !== op).map(o => `<th class="c">${OP_NOME[o]}</th>`).join("")}<th class="r">Soma das faixas</th><th class="r">IQS · faixa</th><th class="r">IR · faixa</th><th class="r">IQP · faixa</th></tr></thead><tbody>` +
+    rows.map(r => `<tr class="click" data-uf="${r.uf}" style="${r.uf === st.uf ? "background:var(--accent-soft)" : ""}"><td><button type="button" class="linkbtn" data-uf="${r.uf}">${UF_NOME[r.uf]}</button> <span class="muted">${r.uf}</span></td><td class="c">${cel(r.me, r.of)}</td>${r.ot.map(([, c, of]) => `<td class="c">${cel(c, of)}</td>`).join("")}<td class="r num">${r.me.soma}</td><td class="r num">${fmt(r.me.iqs, 1)} · ${r.me.f_iqs}</td><td class="r num">${fmt(r.me.ir, 2)} · ${r.me.f_ir}</td><td class="r num">${r.me.fq}</td></tr>`).join("") + `</tbody>` +
+    `<caption style="caption-side:bottom;text-align:left;padding:10px 14px;font-size:12.5px;color:var(--ink-3)">¹ A regra exige oferta em pelo menos 50% dos municípios da UF; aqui a oferta é aproximada pela presença da operadora na base RQUAL. A faixa do IQP é a nacional, porque o ISG por UF não está nos dados usados.</caption>`;
+}
+
+async function renderCidades() {
+  const op = st.op, mode = st.per !== "atual" && st.cSort === "caiu" ? "grandes" : st.cSort;
+  $("pillCaiu").hidden = st.per !== "atual";
+  let L = scope().filter(m => m[op] && m[op].iqs != null);
+  if (mode === "caiu") { await loadPer("anterior"); const ant = st.byId.anterior; L = L.filter(m => m[op].f >= 4 && ant.get(m.id)?.[op]?.f && ant.get(m.id)[op].f <= 3); }
+  if (mode === "de") L = L.filter(m => m[op].f >= 4);
+  L.sort((a, b) => b[op].a - a[op].a);
+  st.cRows = L; const V = L.slice(0, st.nC); $("cMore").hidden = L.length <= st.nC;
+  const showAnt = mode === "caiu";
+  $("cTbl").innerHTML = !V.length ? `<tbody><tr><td class="muted" style="padding:24px">Nenhuma cidade para este filtro.</td></tr></tbody>` :
+    `<thead><tr><th>#</th><th>Cidade</th>${OPS.map(o => `<th class="c">${OP_NOME[o]}</th>`).join("")}<th class="r">IQS ${OP_NOME[op]}</th>${showAnt ? `<th class="c">${OP_NOME[op]} em 2025</th>` : ""}<th>Indicador de menor nota (${OP_NOME[op]})</th></tr></thead><tbody>` +
+    V.map((m, i) => { const o = m[op], k = worstK(o), a2 = showAnt ? st.byId.anterior.get(m.id)?.[op] : null;
+      return `<tr class="click" data-id="${m.id}"><td class="num muted">${i + 1}</td><td class="cityc">${cityBtn(m, `<span class="sub">média de ${int(o.a)} acessos/mês da ${OP_NOME[op]}</span>`)}</td>
+      ${OPS.map(x => `<td class="c">${m[x]?.iqs != null ? pill(LETRA[m[x].f]) : "–"}</td>`).join("")}<td class="r num">${fmt(o.iqs, 1)}</td>${showAnt ? `<td class="c">${a2 ? pill(LETRA[a2.f]) : "–"}</td>` : ""}
+      <td>${k >= 0 ? `<b>${IND[k]}</b> <span class="muted">${esc(nomeInd(IND[k]))}</span> · ${indFmt(IND[k], o.v[k])}` : "–"}</td></tr>`; }).join("") + `</tbody>`;
+}
+
+/* ================= Área Rede de acesso ================= */
+function renderTilesAcesso() {
+  const op = st.op, S = scopeA().filter(m => m[op]);
+  if (st.mun) {
+    const m = st.byIdA.get(st.mun), o = m?.[op];
+    $("tiles").innerHTML = o ? `
+      <div class="tile"><span class="v">${fmt(o.i4, 1)}%</span><span class="l">IND4 médio · ${OP_NOME[op]}</span><span class="s">${anoA()} · ${o.k4} de ${o.n4} meses com amostra significativa</span></div>
+      <div class="tile"><span class="v">${fmt(o.i8, 2)}%</span><span class="l">IND8 médio · ${OP_NOME[op]}</span><span class="s">pior mês: ${fmt(o.i8m, 2)}% (${o.i8mm ? mesLbl(o.i8mm) : "–"})</span></div>
+      <div class="tile"><span class="v">${fmt(o.dl4, 1)} <small>Mbps</small></span><span class="l">Mediana de download 4G</span><span class="s">média das medianas mensais (INF4)</span></div>
+      <div class="tile"><span class="v">${int(o.a)}</span><span class="l">acessos da ${OP_NOME[op]}</span><span class="s">Anatel, ${mesLbl(st.A.meses_ano.at(-1))}</span></div>` : `<div class="tile"><span class="l">A ${OP_NOME[op]} não tem dados nesta cidade.</span></div>`;
+    return;
+  }
+  const com4 = S.filter(m => m[op].i4 != null), c4 = com4.filter(m => !st.conf || confiavel(m[op]));
+  const abaixo = c4.filter(m => m[op].i4 < 65), nosso = c4.filter(m => diag4(m, op) === "nosso" && m[op].i4 < 95);
+  const com8 = S.filter(m => m[op].i8 != null), q8 = com8.filter(m => m[op].i8 < 99.6), q8min = com8.filter(m => m[op].i8m != null && m[op].i8m < 98);
+  const de = S.filter(m => m[op].f >= 4), sai = new Set([...de.filter(m => m[op].iqs + m[op].g4 >= 60), ...de.filter(m => m[op].iqs + m[op].g8 >= 60)]);
+  $("tiles").innerHTML = `
+    <div class="tile"><span class="v">${int(abaixo.length)} <small>de ${int(c4.length)}</small></span><span class="l">cidades com IND4 médio abaixo do mínimo (65%)</span><span class="s">${int(d3.sum(abaixo, m => m[op].a))} acessos da ${OP_NOME[op]}${st.conf ? ` · ${cid(com4.length - c4.length)} fora por amostra` : ""}</span></div>
+    <div class="tile"><span class="v">${int(nosso.length)} <small>de ${int(c4.length)}</small></span><span class="l">cidades abaixo da meta com concorrente 5+ pontos acima no IND4</span><span class="s">comparação no mesmo município</span></div>
+    <div class="tile"><span class="v">${int(q8.length)} <small>de ${int(com8.length)}</small></span><span class="l">cidades com IND8 médio abaixo de 99,6%</span><span class="s">${cid(q8min.length)} com algum mês abaixo de 98%</span></div>
+    <div class="tile"><span class="v">${int(sai.size)} <small>de ${int(de.length)}</small></span><span class="l">cidades com selo calculado D/E que sobem com IND4 ou IND8 na meta</span><span class="s">simulação pela regra da Anatel</span></div>`;
+  $("aVisTitle").textContent = `Visão geral · ${scopeName()}`;
+  $("aHeadline").innerHTML = `${st.uf ? `Em ${UF_NOME[st.uf]}` : "No Brasil"}, de ${anoA()}, a ${OP_NOME[op]} teve <b>IND4 médio abaixo do mínimo em ${int(abaixo.length)} de ${cid(c4.length)}</b> com amostra significativa em mais da metade dos meses, e <b>IND8 médio abaixo de 99,6% em ${int(q8.length)} de ${cid(com8.length)}</b>.`;
+}
+
+function lineChart(el, { series, yDomain, refs = [], fmtY = v => fmt(v, 0), height = 260, xs, xLabel = mesLbl, partialFrom, tipFmt, compact }) {
+  el.innerHTML = "";
+  const W = Math.max(300, el.clientWidth || 600), H = height, m = { t: 12, r: 52, b: 26, l: 44 };
+  const x = d3.scalePoint().domain(xs).range([m.l, W - m.r]).padding(0.2), y = d3.scaleLinear().domain(yDomain).range([H - m.b, m.t]).nice();
+  const svg = d3.select(el).append("svg").attr("viewBox", `0 0 ${W} ${H}`).attr("width", "100%").attr("role", "img");
+  svg.append("g").attr("class", "grid").selectAll("line").data(y.ticks(compact ? 3 : 4)).join("line").attr("x1", m.l).attr("x2", W - m.r).attr("y1", d => y(d)).attr("y2", d => y(d));
+  svg.append("g").selectAll("text").data(y.ticks(compact ? 3 : 4)).join("text").attr("x", m.l - 8).attr("y", d => y(d) + 4).attr("text-anchor", "end").text(fmtY);
+  const step = Math.ceil(xs.length / Math.max(2, Math.floor((W - m.l - m.r) / 66)));
+  svg.append("g").selectAll("text").data(xs.filter((_, i) => i % step === 0)).join("text").attr("x", d => x(d)).attr("y", H - 6).attr("text-anchor", "middle").text(d => xLabel(d).replace(" sem. ", "/"));
+  for (const r of refs) { if (r.y < y.domain()[0] || r.y > y.domain()[1]) continue;
+    svg.append("line").attr("x1", m.l).attr("x2", W - m.r).attr("y1", y(r.y)).attr("y2", y(r.y)).attr("stroke", css(r.color || "--ink-3")).attr("stroke-dasharray", r.dash || "5 4").attr("opacity", .9);
+    svg.append("text").attr("x", m.l + 6).attr("y", y(r.y) - 5).style("fill", css(r.color || "--ink-2")).text(r.label); }
+  const line = d3.line().defined(d => d.y != null).x(d => x(d.x)).y(d => y(d.y)).curve(d3.curveMonotoneX);
+  for (const s of series.slice().sort((a, b) => a.bold - b.bold)) {
+    if (s.bars) { svg.append("g").selectAll("rect").data(s.points.filter(p => p.y != null)).join("rect").attr("x", d => x(d.x) - 5).attr("width", 10).attr("y", d => y(d.y)).attr("height", d => Math.max(0, y(y.domain()[0]) - y(d.y))).attr("rx", 3).attr("fill", s.color); continue; }
+    const full = s.points.filter(p => partialFrom == null || p.x < partialFrom);
+    svg.append("path").attr("d", line(full)).attr("fill", "none").attr("stroke", s.color).attr("stroke-width", s.bold ? 3 : 2).attr("opacity", s.bold ? 1 : .75).attr("stroke-linecap", "round");
+    if (partialFrom != null) { const lf = full.filter(p => p.y != null).at(-1), parts = s.points.filter(p => p.x >= partialFrom && p.y != null);
+      if (lf && parts.length) svg.append("path").attr("d", line([lf, ...parts])).attr("fill", "none").attr("stroke", s.color).attr("stroke-width", 2).attr("stroke-dasharray", "4 4"); }
+    if (xs.length <= 14) svg.append("g").selectAll("circle").data(s.points.filter(p => p.y != null)).join("circle").attr("cx", d => x(d.x)).attr("cy", d => y(d.y)).attr("r", 3.5).attr("fill", d => partialFrom != null && d.x >= partialFrom ? css("--surface") : s.color).attr("stroke", s.color).attr("stroke-width", 1.6);
+    else { const last = s.points.filter(p => p.y != null).at(-1); if (last) svg.append("circle").attr("cx", x(last.x)).attr("cy", y(last.y)).attr("r", s.bold ? 4.5 : 3.5).attr("fill", s.color).attr("stroke", css("--surface")).attr("stroke-width", 2); }
+  }
+  const ends = series.filter(s => !s.bars).map(s => { const p = s.points.filter(p => p.y != null).at(-1); return p && { s, y: y(p.y), x: x(p.x) }; }).filter(Boolean).sort((a, b) => a.y - b.y);
+  for (let i = 1; i < ends.length; i++) if (ends[i].y - ends[i - 1].y < 13) ends[i].y = ends[i - 1].y + 13;
+  for (const e of ends) svg.append("text").attr("x", e.x + 9).attr("y", e.y + 4).style("fill", css("--ink")).style("font-weight", 600).style("font-size", "12px").text(e.s.name);
+  const tip = document.createElement("div"); tip.className = "tip"; tip.hidden = true; el.appendChild(tip);
+  const guide = svg.append("line").attr("y1", m.t).attr("y2", H - m.b).attr("stroke", css("--ink-3")).attr("opacity", 0);
+  svg.append("rect").attr("x", m.l).attr("y", m.t).attr("width", W - m.l - m.r).attr("height", H - m.t - m.b).attr("fill", "transparent")
+    .on("pointermove", ev => { const [px] = d3.pointer(ev), xv = xs.reduce((a, b) => Math.abs(x(b) - px) < Math.abs(x(a) - px) ? b : a);
+      guide.attr("x1", x(xv)).attr("x2", x(xv)).attr("opacity", .5);
+      tip.innerHTML = `<div style="font-weight:600;margin-bottom:6px">${xLabel(xv)}${partialFrom != null && xv >= partialFrom ? " · parcial" : ""}</div>` + series.map(s => { const p = s.points.find(p => p.x === xv); return `<div style="display:flex;justify-content:space-between;gap:14px"><span><i style="display:inline-block;width:8px;height:8px;border-radius:50%;background:${s.color};margin-right:6px"></i>${s.name}</span><b class="num">${p && p.y != null ? (tipFmt || fmtY)(p.y) : "–"}</b></div>`; }).join("");
+      tip.hidden = false; tip.style.left = `${Math.max(0, Math.min(x(xv) / W * el.clientWidth + 14, el.clientWidth - 190))}px`; tip.style.top = "6px"; })
+    .on("pointerleave", () => { tip.hidden = true; guide.attr("opacity", 0); });
+}
+const legOps = (el, parcial) => { el.innerHTML = OPS.map(o => `<span><i class="ln" style="background:${opCor(o)}"></i>${OP_NOME[o]}</span>`).join("") + (parcial ? `<span><i class="ln" style="background:${css("--ink-3")}"></i>tracejado: semestre em andamento</span>` : ""); };
+
+async function renderChartsA() {
+  const R = st.R, op = st.op, ser = await monthly(), K = { IND4: 3, IND8: 7 };
+  for (const ind of ["IND4", "IND8"]) {
+    const k = K[ind], dec = ind === "IND8" ? 2 : 1;
+    const series = OPS.map(o => ({ name: OP_NOME[o], color: opCor(o), bold: o === op, points: R.meses.map((mm, j) => ({ x: mm, y: ser[o][k][j] })) }));
+    const all = series.flatMap(s => s.points.map(p => p.y)).filter(v => v != null);
+    const last = lastVal(ser[op][k]);
+    $(ind === "IND4" ? "ovBig4" : "ovBig8").innerHTML = last != null ? `${fmt(last, dec)}%<small>${OP_NOME[op]} em ${mesLbl(R.meses.at(-1))} · ${esc(scopeName())}</small>` : `–<small>sem dado</small>`;
+    for (const [el, leg, h, compact] of ind === "IND4" ? [["ovCh4", "ovLeg4", 170, true], ["ch4", "leg4", 300, false]] : [["ovCh8", "ovLeg8", 170, true], ["ch8", "leg8", 300, false]]) {
+      legOps($(leg));
+      if (!all.length) { $(el).innerHTML = `<p class="small muted">Sem dados neste recorte.</p>`; continue; }
+      const lo = Math.min(...all), hi = Math.max(...all);
+      const yd = ind === "IND8" ? [Math.min(lo, 99.5) - 0.1, 100] : [Math.max(0, Math.min(lo, compact ? lo : 65) - 3), Math.min(100, Math.max(hi, 95) + 1)];
+      const refs = ind === "IND8" ? [{ y: 98, label: "mínimo 98%", color: "--ink-2", dash: "2 4" }] : [{ y: 95, label: "meta 95%", color: "--ink-2" }, { y: 65, label: "mínimo 65%", color: "--ink-2", dash: "2 4" }];
+      lineChart($(el), { series, xs: R.meses, yDomain: yd, refs, height: h, compact, fmtY: v => fmt(v, ind === "IND8" ? 1 : 0), tipFmt: v => `${fmt(v, dec)}%` });
+    }
+    $(ind === "IND4" ? "c4Title" : "c8Title").textContent = `${scopeName()}, mês a mês`;
+  }
+}
+
+function renderScatter() {
+  const op = st.op, el = $("chSc");
+  if ($("t4-comp").hidden) return;
+  const pts = scopeA().filter(m => m[op] && m[op].i4 != null && (!st.conf || confiavel(m[op]))).map(m => { const b = best(m, "i4", op); return b && { m, x: m[op].i4, y: b.v, bo: b.o, a: m[op].a, d: diag4(m, op) }; }).filter(Boolean);
+  $("legSc").innerHTML = `<span><i style="background:${opFill(op)}"></i>Algum concorrente 5 pontos ou mais acima</span><span><i style="background:${css("--gray-dot")}"></i>Todas abaixo de 80%</span><span><i style="background:${css("--line-2")}"></i>Demais</span>`;
+  el.innerHTML = "";
+  if (!pts.length) { el.innerHTML = `<p class="small muted">Sem cidades com dados comparáveis.</p>`; return; }
+  const W = Math.max(300, el.clientWidth || 700), H = Math.min(520, Math.max(320, W * 0.55)), mg = { t: 10, r: 16, b: 40, l: 52 };
+  const lo = Math.max(0, Math.min(d3.min(pts, p => Math.min(p.x, p.y)), 60) - 2);
+  const x = d3.scaleLinear().domain([lo, 100]).range([mg.l, W - mg.r]), y = d3.scaleLinear().domain([lo, 100]).range([H - mg.b, mg.t]);
+  const r = d3.scaleSqrt().domain([0, d3.max(pts, p => p.a) || 1]).range([1.8, 18]);
+  const svg = d3.select(el).append("svg").attr("viewBox", `0 0 ${W} ${H}`).attr("width", "100%").attr("role", "img").attr("aria-label", "Dispersão do IND4 por cidade");
+  svg.append("g").attr("class", "grid").selectAll("line").data(y.ticks(5)).join("line").attr("x1", mg.l).attr("x2", W - mg.r).attr("y1", d => y(d)).attr("y2", d => y(d));
+  svg.append("g").selectAll("text").data(y.ticks(5)).join("text").attr("x", mg.l - 8).attr("y", d => y(d) + 4).attr("text-anchor", "end").text(d => `${d}%`);
+  svg.append("g").selectAll("text").data(x.ticks(6)).join("text").attr("x", d => x(d)).attr("y", H - 22).attr("text-anchor", "middle").text(d => `${d}%`);
+  svg.append("text").attr("x", (mg.l + W - mg.r) / 2).attr("y", H - 4).attr("text-anchor", "middle").style("font-weight", 600).text(`IND4 da ${OP_NOME[op]}`);
+  svg.append("text").attr("transform", `translate(12,${(mg.t + H - mg.b) / 2}) rotate(-90)`).attr("text-anchor", "middle").style("font-weight", 600).text("IND4 do melhor concorrente");
+  svg.append("line").attr("x1", x(lo)).attr("y1", y(lo)).attr("x2", x(100)).attr("y2", y(100)).attr("stroke", css("--ink-3")).attr("stroke-dasharray", "4 4");
+  svg.append("line").attr("x1", x(65)).attr("x2", x(65)).attr("y1", mg.t).attr("y2", H - mg.b).attr("stroke", css("--ink-2")).attr("stroke-dasharray", "2 4");
+  svg.append("text").attr("x", x(65) + 6).attr("y", mg.t + 12).text("mínimo 65%");
+  const tip = document.createElement("div"); tip.className = "tip"; tip.hidden = true; el.appendChild(tip);
+  svg.append("g").selectAll("circle").data(pts.sort((a, b) => b.a - a.a)).join("circle")
+    .attr("cx", p => x(p.x)).attr("cy", p => y(p.y)).attr("r", p => r(p.a))
+    .attr("fill", p => p.d === "nosso" ? opFill(op) : p.d === "todos" ? css("--gray-dot") : css("--line-2")).attr("fill-opacity", .72)
+    .attr("stroke", p => p.m.id === st.mun ? css("--ink") : css("--surface")).attr("stroke-width", p => p.m.id === st.mun ? 2 : .6).style("cursor", "pointer")
+    .on("pointermove", (ev, p) => { const [px, py] = d3.pointer(ev, el); tip.innerHTML = `<b>${esc(p.m.nome)}</b> <span class="muted">${p.m.uf}</span><div class="small" style="margin-top:4px">${OP_NOME[op]}: <b class="num">${fmt(p.x, 1)}%</b> · ${OP_NOME[p.bo]}: <b class="num">${fmt(p.y, 1)}%</b><br>${int(p.a)} acessos da ${OP_NOME[op]}</div>`; tip.hidden = false; tip.style.left = `${Math.min(px + 14, el.clientWidth - 200)}px`; tip.style.top = `${Math.max(0, py - 70)}px`; })
+    .on("pointerleave", () => { tip.hidden = true; })
+    .on("click", (ev, p) => setScope(p.m.uf, p.m.id, true));
+}
+
+function meter(v, min, color) {
+  const pct = v == null ? 0 : Math.max(0, Math.min(100, v));
+  return `<div class="meter"><b class="num" style="text-align:right">${vBad(v == null ? "–" : fmt(v, 1) + "%", v != null && v < min)}</b><div class="bar"><span style="width:${pct}%;background:${color}"></span><i class="min" style="left:${min}%" title="mínimo ${min}%"></i></div></div>`;
+}
+function rivals(m, key, d) { return `<div class="rivals">${OPS.filter(o => o !== st.op && m[o] && m[o][key] != null).map(o => `<span><i style="background:${opFill(o)}"></i>${OP_NOME[o]} <b class="num">${fmt(m[o][key], d)}%</b></span>`).join("") || "–"}</div>`; }
+function rows4() {
+  const op = st.op, ord = st.s4, dg = st.d4;
+  let L = scopeA().filter(m => m[op] && m[op].i4 != null && m[op].i4 < 95 && (!st.conf || confiavel(m[op])) && (!dg || diag4(m, op) === dg));
+  if (ord === "de") L = L.filter(m => m[op].f >= 4 && m[op].iqs + m[op].g4 >= 60).sort((a, b) => b[op].a - a[op].a);
+  else if (ord === "dl") L = L.filter(m => m[op].dl4 != null).sort((a, b) => a[op].dl4 - b[op].dl4 || b[op].a - a[op].a);
+  else if (ord === "pior") L = L.sort((a, b) => a[op].i4 - b[op].i4);
+  else L = L.sort((a, b) => b[op].a * (95 - b[op].i4) - a[op].a * (95 - a[op].i4));
+  return L;
+}
+function renderT4() {
+  const op = st.op, all = rows4(), L = all.slice(0, st.n4); st.r4 = all; $("more4").hidden = all.length <= st.n4;
+  $("t4").innerHTML = !L.length ? `<tbody><tr><td class="muted" style="padding:24px">Nenhuma cidade para este filtro.</td></tr></tbody>` :
+    `<thead><tr><th>#</th><th>Cidade</th><th class="r">IND4 ${st.A.ano} · ${OP_NOME[op]}</th><th class="r">${mesLbl(st.A.meses_ano.at(-1))}</th><th class="r">Concorrentes (IND4 ${st.A.ano})</th><th>Amostra significativa</th><th class="r">Mediana download 4G</th><th>Selo calculado → com IND4 na meta</th></tr></thead><tbody>` +
+    L.map((m, i) => { const o = m[op];
+      return `<tr class="click" data-id="${m.id}"><td class="num muted">${i + 1}</td><td class="cityc">${cityBtn(m, `<span class="sub">${int(o.a)} acessos em ${mesLbl(st.A.meses_ano.at(-1))}</span>`)}</td>
+      <td class="r">${meter(o.i4, 65, opFill(op))}</td><td class="r num">${o.i4u != null ? fmt(o.i4u, 1) + "%" : "–"}</td><td class="r">${rivals(m, "i4", 1)}</td>
+      <td>${amostra(o)}</td><td class="r num">${o.dl4 != null ? fmt(o.dl4, 1) + " Mbps" : "–"}</td><td>${seloMove(o.f, faixaIqs(Math.min(100, o.iqs + o.g4)))}</td></tr>`; }).join("") + `</tbody>`;
+}
+function rows8() {
+  const op = st.op, ord = st.s8;
+  let L = scopeA().filter(m => m[op] && m[op].i8 != null && (m[op].i8 < 99.6 || (m[op].i8m ?? 100) < 98));
+  if (ord === "pior") L = L.sort((a, b) => a[op].i8m - b[op].i8m);
+  else if (ord === "de") L = L.filter(m => m[op].f >= 4 && m[op].iqs + m[op].g8 >= 60).sort((a, b) => b[op].a - a[op].a);
+  else L = L.sort((a, b) => b[op].a * (100 - b[op].i8) - a[op].a * (100 - a[op].i8));
+  return L;
+}
+function renderT8() {
+  const op = st.op, all = rows8(), L = all.slice(0, st.n8); st.r8 = all; $("more8").hidden = all.length <= st.n8;
+  $("t8").innerHTML = !L.length ? `<tbody><tr><td class="muted" style="padding:24px">Nenhuma cidade para este filtro.</td></tr></tbody>` :
+    `<thead><tr><th>#</th><th>Cidade</th><th class="r">IND8 ${st.A.ano} · ${OP_NOME[op]}</th><th class="r">Pior mês</th><th class="r">Outras operadoras no mesmo mês</th><th class="r">DEC no pior mês</th><th class="r">DEC mensal mediano</th><th>Selo calculado → com IND8 na meta</th></tr></thead><tbody>` +
+    L.map((m, i) => { const o = m[op];
+      return `<tr class="click" data-id="${m.id}"><td class="num muted">${i + 1}</td><td class="cityc">${cityBtn(m, `<span class="sub">${int(o.a)} acessos em ${mesLbl(st.A.meses_ano.at(-1))}</span>`)}</td>
+      <td class="r num"><b>${fmt(o.i8, 2)}%</b></td><td class="r num"><b>${vBad(fmt(o.i8m, 2) + "%", o.i8m < 98)}</b> <span class="muted">${o.i8mm ? mesLbl(o.i8mm) : ""}</span></td>
+      <td class="r"><div class="rivals">${Object.entries(o.c8 || {}).map(([x, v]) => `<span><i style="background:${opFill(x)}"></i>${OP_NOME[x]} <b class="num">${fmt(v, 2)}%</b></span>`).join("") || "–"}</div></td>
+      <td class="r num">${o.dpm != null ? fmt(o.dpm, 2) + " h" : "–"}</td><td class="r num muted">${o.dmed != null ? fmt(o.dmed, 2) + " h" : "–"}</td><td>${seloMove(o.f, faixaIqs(Math.min(100, o.iqs + o.g8)))}</td></tr>`; }).join("") + `</tbody>`;
+}
+
+/* ================= Ficha da cidade ================= */
+async function renderSide() {
+  const op = st.op;
+  if (!st.mun) {
+    if (st.area === "selo") {
+      const L = scope().filter(m => m[op] && m[op].iqs != null).sort((a, b) => b[op].a - a[op].a).slice(0, 10);
+      $("side").innerHTML = `<div style="display:grid;gap:4px"><span class="small muted">${esc(scopeName())} · ${OP_NOME[op]}</span><h3>Maiores cidades</h3><p class="small muted">Por média mensal de acessos. Selo municipal calculado da ${OP_NOME[op]}. Clique para abrir a ficha.</p></div>
+        <div class="ranklist">${L.map((m, i) => `<button type="button" data-id="${m.id}"><span class="n num">${i + 1}</span><span><b>${esc(m.nome)}</b> <span class="muted small">${m.uf}</span></span>${pill(LETRA[m[op].f])}</button>`).join("")}</div>`;
+    } else {
+      const L = scopeA().filter(m => m[op] && m[op].i4 != null && m[op].i4 < 95 && (!st.conf || confiavel(m[op]))).sort((a, b) => b[op].a * (95 - b[op].i4) - a[op].a * (95 - a[op].i4)).slice(0, 10);
+      $("side").innerHTML = `<div style="display:grid;gap:4px"><span class="small muted">${esc(scopeName())} · ${OP_NOME[op]}</span><h3>Maior produto acessos × distância até a meta do IND4</h3><p class="small muted">Clique para abrir a ficha.</p></div>
+        <div class="ranklist">${L.map((m, i) => `<button type="button" data-id="${m.id}"><span class="n num">${i + 1}</span><span><b>${esc(m.nome)}</b> <span class="muted small">${m.uf} · ${int(m[op].a)} acessos</span></span><b class="num">${fmt(m[op].i4, 1)}%</b></button>`).join("") || `<p class="small muted">Nenhuma cidade abaixo da meta.</p>`}</div>`;
+    }
+    return;
+  }
+  const m = byId(st.mun) || st.byIdA.get(st.mun), d = (await ufData(m.uf))[st.mun] || {}, ma = st.byIdA.get(st.mun), oa = ma?.[op];
+  if (st.mun !== m.id) return;
+  let html = `<div style="display:grid;gap:2px"><span class="small muted">${UF_NOME[m.uf]} · IBGE ${m.id}</span><h3>${esc(m.nome)}</h3></div>`;
+  if (st.area === "selo") {
+    const ms = byId(st.mun);
+    html += `<div class="tbl-wrap" style="box-shadow:none"><table><thead><tr><th>${per().nome}</th>${OPS.map(o => `<th class="r">${OP_NOME[o]}</th>`).join("")}</tr></thead><tbody>
+      <tr><td>Selo calculado</td>${OPS.map(o => `<td class="r">${ms?.[o]?.iqs != null ? pill(LETRA[ms[o].f]) : "–"}</td>`).join("")}</tr>
+      <tr><td>IQS</td>${OPS.map(o => `<td class="r num">${fmt(ms?.[o]?.iqs, 1)}</td>`).join("")}</tr>
+      ${IND.map((ind, k) => `<tr><td><b>${ind}</b> <span class="muted small">${esc(nomeInd(ind))}</span></td>${OPS.map(o => { const n = ms?.[o]?.n?.[k]; return `<td class="r num">${vBad(indFmt(ind, ms?.[o]?.v?.[k]), n != null && n < 8)}</td>`; }).join("")}</tr>`).join("")}
+    </tbody></table></div><p class="small muted">▼ nota do indicador abaixo de 8 de 10 pela regra da Anatel.</p>
+    <div style="display:grid;gap:6px"><b>IQS municipal calculado por semestre</b><div class="chart" id="sA"></div></div>`;
+  } else {
+    html += oa ? `<div class="stats">
+      <div class="stat"><span class="l">Acessos ${OP_NOME[op]} (${mesLbl(st.A.meses_ano.at(-1))})</span><span class="v">${int(oa.a)}</span></div>
+      <div class="stat"><span class="l">Selo calculado ${st.A.ano}</span><span class="v">${pill(LETRA[oa.f])} <span style="font-size:14px">${fmt(oa.iqs, 1)}</span></span></div>
+      <div class="stat"><span class="l">IND4 ${st.A.ano}</span><span class="v">${fmt(oa.i4, 1)}%</span></div>
+      <div class="stat"><span class="l">Amostra significativa</span><span class="v" style="font-size:14px">${amostra(oa)}</span></div>
+      <div class="stat"><span class="l">Mediana download 4G / 5G</span><span class="v">${fmt(oa.dl4, 0)} / ${fmt(oa.dl5, 0)} <span style="font-size:12px">Mbps</span></span></div>
+      <div class="stat"><span class="l">IND8 ${st.A.ano} · pior mês</span><span class="v">${fmt(oa.i8, 2)}% · ${fmt(oa.i8m, 2)}%</span></div></div>
+      <div class="note">${oa.i8mm && oa.i8m < 100 ? `Pior mês do IND8: <b>${mesLbl(oa.i8mm)}</b> (${fmt(oa.i8m, 2)}%). No mesmo mês: ${conc8(oa)}. DEC da cidade naquele mês: ${oa.dpm != null ? fmt(oa.dpm, 2) + " h" : "sem dado"} (mediana mensal do ano: ${oa.dmed != null ? fmt(oa.dmed, 2) + " h" : "sem dado"}).` : "IND8 em 100% em todos os meses publicados."}${oa.g4 > 0.05 ? `<br>Simulação: com o IND4 na meta, o IQS calculado da cidade sobe ${fmt(oa.g4, 1)} pontos.` : ""}${oa.g8 > 0.05 ? `<br>Simulação: com o IND8 na meta, o IQS calculado da cidade sobe ${fmt(oa.g8, 1)} pontos.` : ""}</div>` : `<p class="muted">A ${OP_NOME[op]} não tem dados nesta cidade.</p>`;
+    html += `<div style="display:grid;gap:6px"><b>IND4 mês a mês</b><div class="legend" id="lgA"></div><div class="chart" id="sB"></div></div>
+      <div style="display:grid;gap:6px"><b>IND8 mês a mês</b><div class="chart" id="sC"></div></div>
+      <div style="display:grid;gap:6px"><b>DEC por mês (ANEEL, horas)</b><div class="chart" id="sD"></div></div>`;
+  }
+  html += `<button type="button" class="btn" id="backUf">← Voltar para ${UF_NOME[m.uf]}</button>`;
+  $("side").innerHTML = html;
+  const R = st.R;
+  if (st.area === "selo") {
+    const sems = [...new Set(OPS.flatMap(o => d[o]?.s || []))].sort();
+    const s = OPS.filter(o => d[o]?.s).map(o => ({ name: OP_NOME[o], color: opCor(o), bold: o === op, points: sems.map(x => { const i = d[o].s.indexOf(x); return { x, y: i >= 0 ? d[o].iqs[i] : null }; }) }));
+    const lo = Math.min(60, ...s.flatMap(z => z.points.map(p => p.y ?? 100)));
+    if (sems.length) lineChart($("sA"), { series: s, xs: sems, yDomain: [Math.max(0, lo - 5), 100], refs: [{ y: 90, label: "A" }, { y: 75, label: "B" }, { y: 60, label: "C" }], height: 200, partialFrom: R.semestre_parcial, xLabel: semLbl, tipFmt: v => fmt(v, 1) });
+  } else {
+    legOps($("lgA"));
+    const mk = k => OPS.map(x => ({ name: OP_NOME[x], color: opCor(x), bold: x === op, points: R.meses.map((mm, j) => ({ x: mm, y: d[x]?.m?.[k]?.[j] ?? null })) }));
+    const a4 = mk(3), v4 = a4.flatMap(s => s.points.map(p => p.y)).filter(v => v != null);
+    if (v4.length) lineChart($("sB"), { series: a4, xs: R.meses, yDomain: [Math.max(0, Math.min(...v4, 65) - 3), 100], refs: [{ y: 95, label: "meta", color: "--ink-2" }, { y: 65, label: "mínimo", color: "--ink-2", dash: "2 4" }], height: 180, compact: true, tipFmt: v => `${fmt(v, 1)}%` });
+    const a8 = mk(7), v8 = a8.flatMap(s => s.points.map(p => p.y)).filter(v => v != null);
+    if (v8.length) lineChart($("sC"), { series: a8, xs: R.meses, yDomain: [Math.min(...v8, 99.5) - 0.1, 100], refs: [{ y: 98, label: "mínimo", color: "--ink-2", dash: "2 4" }], height: 160, compact: true, fmtY: v => fmt(v, 1), tipFmt: v => `${fmt(v, 2)}%` });
+    const dv = (d.dec || []).filter(v => v != null);
+    if (dv.length) lineChart($("sD"), { series: [{ name: "DEC", color: css("--accent"), bold: true, bars: true, points: R.meses.map((mm, j) => ({ x: mm, y: d.dec[j] })) }], xs: R.meses, yDomain: [0, Math.max(1, ...dv)], height: 140, compact: true, fmtY: v => fmt(v, 1), tipFmt: v => `${fmt(v, 2)} h` });
+    else $("sD").innerHTML = `<p class="small muted">Sem dado da ANEEL para esta cidade.</p>`;
+  }
+  $("backUf").onclick = () => setScope(m.uf, null);
+}
+
+/* ================= Mapa ================= */
+let mapSvg, mapG, mapPath, zoom, geo;
+const BINS = {
+  selo: () => [["A", "A"], ["B", "B"], ["C", "C"], ["D", "D"], ["E", "E"], ["na", "Sem dado"]],
+  lider: () => [...OPS.map(o => [o, OP_NOME[o]]), ["emp", "Empate"], ["na", "Sem dado"]],
+  ind: () => [["A", "nota 9 a 10"], ["B", "7,5 a 9"], ["C", "6 a 7,5"], ["D", "4 a 6"], ["E", "abaixo de 4"], ["na", "Sem dado"]],
+  i4: () => [["A", "95% ou mais (meta)"], ["B", "85 a 95%"], ["C", "75 a 85%"], ["D", "65 a 75%"], ["E", "abaixo de 65% (mínimo)"], ["na", "Sem dado ou amostra pequena"]],
+  i8: () => [["A", "99,9% ou mais"], ["B", "99,6 a 99,9%"], ["C", "99 a 99,6%"], ["D", "98 a 99%"], ["E", "abaixo de 98%"], ["na", "Sem dado"]],
+  dec: () => [["A", "menos de 5 h"], ["B", "5 a 10 h"], ["C", "10 a 20 h"], ["D", "20 a 40 h"], ["E", "40 h ou mais"], ["na", "Sem dado"]],
+  conf: () => [["A", "Mais da metade dos meses"], ["D", "Metade ou menos"], ["na", "Sem dado"]],
+};
+function groupOf(id) {
+  const L = st.layer;
+  if (["selo", "lider", "ind"].includes(L)) {
+    const m = byId(id); if (!m) return "na";
+    if (L === "lider") { const ok = OPS.filter(x => m[x]?.iqs != null).sort((a, b) => m[b].iqs - m[a].iqs); if (!ok.length) return "na"; return ok.length > 1 && m[ok[0]].iqs === m[ok[1]].iqs ? "emp" : ok[0]; }
+    const o = m[st.op]; if (!o || o.iqs == null) return "na";
+    if (L === "selo") return LETRA[o.f];
+    const n = o.n[IND.indexOf(st.mapInd)]; return n == null ? "na" : n >= 9 ? "A" : n >= 7.5 ? "B" : n >= 6 ? "C" : n >= 4 ? "D" : "E";
+  }
+  const m = st.byIdA.get(id); if (!m) return "na";
+  if (L === "dec") { const v = m.dec; return v == null ? "na" : v < 5 ? "A" : v < 10 ? "B" : v < 20 ? "C" : v < 40 ? "D" : "E"; }
+  const o = m[st.op]; if (!o) return "na";
+  if (L === "i4") { if (o.i4 == null || (st.conf && !confiavel(o))) return "na"; const v = o.i4; return v >= 95 ? "A" : v >= 85 ? "B" : v >= 75 ? "C" : v >= 65 ? "D" : "E"; }
+  if (L === "i8") { const v = o.i8; return v == null ? "na" : v >= 99.9 ? "A" : v >= 99.6 ? "B" : v >= 99 ? "C" : v >= 98 ? "D" : "E"; }
+  return o.s4 == null ? "na" : confiavel(o) ? "A" : "D";
+}
+const gColor = g => g === "na" ? "url(#hatch)" : OPS.includes(g) ? opFill(g) : g === "emp" ? css("--gray-dot") : seloCor(g);
+const gSwatch = g => g === "na" ? `<i class="hatch"></i>` : `<i style="background:${gColor(g)}"></i>`;
+async function drawMap() {
+  const [mt, ut, wt] = await Promise.all(["data/br_mun.json", "data/br_uf.json", "data/mundo.json"].map(u => fetch(u).then(r => r.json())));
+  geo = { mf: topojson.feature(mt, mt.objects.BRMU), uf: topojson.feature(ut, ut.objects.BRUF), mesh: topojson.mesh(ut, ut.objects.BRUF, (a, b) => a !== b), br: topojson.merge(ut, ut.objects.BRUF.geometries), paises: topojson.feature(wt, wt.objects.countries).features.filter(f => f.id !== "076") };
+  const el = $("map"); el.querySelector(".loading")?.remove();
+  const W = 800, H = 740; st.mapW = W; st.mapH = H;
+  const proj = d3.geoMercator().fitExtent([[24, 24], [W - 24, H - 24]], geo.mf);
+  mapPath = d3.geoPath(proj);
+  mapSvg = d3.select(el).append("svg").attr("viewBox", `0 0 ${W} ${H}`).attr("role", "img").attr("aria-label", "Mapa do Brasil por município");
+  const pat = mapSvg.append("defs").append("pattern").attr("id", "hatch").attr("patternUnits", "userSpaceOnUse").attr("width", 4).attr("height", 4).attr("patternTransform", "rotate(45)");
+  pat.append("rect").attr("width", 4).attr("height", 4).attr("class", "hatch-bg");
+  pat.append("line").attr("x1", 0).attr("y1", 0).attr("x2", 0).attr("y2", 4).attr("class", "hatch-ln").attr("stroke-width", 1.5);
+  mapG = mapSvg.append("g");
+  mapG.append("path").attr("class", "grat").datum(d3.geoGraticule().step([5, 5])()).attr("d", mapPath);
+  mapG.append("g").selectAll("path").data(geo.paises).join("path").attr("class", "pais").attr("d", mapPath);
+  const PAISES = [["Venezuela", -65.5, 6.8], ["Colômbia", -72.5, 2.5], ["Peru", -75, -10.5], ["Bolívia", -64.5, -17], ["Paraguai", -58.3, -23], ["Argentina", -62, -29.5], ["Uruguai", -56, -32.7], ["Guiana", -58.9, 5.2], ["Suriname", -55.9, 4.1]];
+  mapG.append("g").selectAll("text").data(PAISES).join("text").attr("class", "lbl-pais").attr("transform", d => `translate(${proj([d[1], d[2]])})`).text(d => d[0]);
+  mapG.append("g").selectAll("path").data(geo.mf.features).join("path").attr("class", "mun").attr("d", mapPath)
+    .on("pointermove", (ev, d) => tipMap(ev, d.properties.codarea)).on("pointerleave", () => { st.tip.hidden = true; })
+    .on("click", (ev, d) => { const m = byId(d.properties.codarea) || st.byIdA.get(d.properties.codarea); if (m) setScope(m.uf, m.id); });
+  mapG.append("path").attr("class", "ufb").datum(geo.mesh).attr("d", mapPath);
+  mapG.append("path").attr("class", "brasil").datum(geo.br).attr("d", mapPath);
+  const aj = { DF: [0, -6], GO: [-6, 8], RN: [10, -4], PB: [16, 2], PE: [18, 4], AL: [14, 6], SE: [12, 8], ES: [10, 4], RJ: [12, 8], SC: [10, 0] };
+  mapG.append("g").selectAll("text").data(geo.uf.features.map(f => ({ uf: UF_COD[f.properties.codarea], p: mapPath.centroid(f) }))).join("text").attr("class", "lbl-uf").attr("x", d => d.p[0] + (aj[d.uf]?.[0] || 0)).attr("y", d => d.p[1] + (aj[d.uf]?.[1] || 0) + 4).text(d => d.uf);
+  const caps = st.R.capitais.map(id => { const f = geo.mf.features.find(x => x.properties.codarea === id); return f && { nome: byId(id)?.nome || "", p: mapPath.centroid(f) }; }).filter(Boolean);
+  const gc = mapG.append("g").selectAll("g").data(caps).join("g").attr("transform", d => `translate(${d.p})`);
+  gc.append("circle").attr("class", "cap").attr("r", 2.6); gc.append("text").attr("class", "lbl-cap").attr("x", 5).attr("y", 3.5).text(d => d.nome);
+  const scaleK = k => {
+    mapG.selectAll("path.mun").attr("stroke-width", d => d.properties.codarea === st.mun ? 2 / k : 0.12 / Math.sqrt(k));
+    mapG.selectAll("path.ufb").attr("stroke-width", 0.8 / k); mapG.selectAll("path.brasil").attr("stroke-width", 1.2 / k); mapG.selectAll("path.pais, path.grat").attr("stroke-width", 0.6 / k);
+    mapG.selectAll("text.lbl-uf").style("font-size", `${11 / Math.sqrt(k)}px`).style("stroke-width", `${3 / Math.sqrt(k)}px`).attr("display", k > 6 ? "none" : null);
+    mapG.selectAll("circle.cap").attr("r", 2.6 / Math.sqrt(k)).attr("stroke-width", 1.2 / k);
+    mapG.selectAll("text.lbl-cap").style("font-size", `${10 / k}px`).style("stroke-width", `${2.5 / k}px`).attr("x", 5 / k).attr("y", 3.5 / k).attr("display", k < 1.8 ? "none" : null);
+    mapG.selectAll("text.lbl-pais").style("font-size", `${11 / k}px`);
+  };
+  zoom = d3.zoom().scaleExtent([1, 60]).translateExtent([[-200, -200], [W + 200, H + 200]])
+    .filter(e => e.type === "wheel" ? (e.ctrlKey || e.metaKey) : e.type.startsWith("touch") ? e.touches.length > 1 : !e.button)
+    .on("zoom", ev => { mapG.attr("transform", ev.transform); st.k = ev.transform.k; scaleK(ev.transform.k); });
+  mapSvg.call(zoom); scaleK(1); st.k = 1;
+  const hint = document.createElement("div"); hint.className = "maphint"; hint.textContent = "Ctrl + roda (⌘ no Mac) ou botões para aproximar"; el.appendChild(hint);
+  $("zIn").onclick = () => mapSvg.transition().duration(300).call(zoom.scaleBy, 1.7);
+  $("zOut").onclick = () => mapSvg.transition().duration(300).call(zoom.scaleBy, 1 / 1.7);
+  $("zReset").onclick = () => setScope("", null);
+  st.tip = document.createElement("div"); st.tip.className = "tip"; st.tip.hidden = true; el.appendChild(st.tip);
+  st.mapReady = true; paintMap(); zoomTo();
+}
+function paintMap() {
+  if (!st.mapReady) return;
+  mapSvg.select(".hatch-bg").attr("fill", css("--q-na")); mapSvg.select(".hatch-ln").attr("stroke", css("--surface"));
+  mapG.selectAll("path.mun").attr("fill", d => gColor(groupOf(d.properties.codarea))).classed("dim", d => st.hidden.has(groupOf(d.properties.codarea))).classed("sel", d => d.properties.codarea === st.mun)
+    .attr("stroke-width", d => d.properties.codarea === st.mun ? 2 / (st.k || 1) : 0.12 / Math.sqrt(st.k || 1));
+  const cnt = {}; geo.mf.features.forEach(f => { const g = groupOf(f.properties.codarea); cnt[g] = (cnt[g] || 0) + 1; });
+  const tit = { selo: `Selo municipal calculado · ${OP_NOME[st.op]} · ${per().nome}`, lider: `Operadora com o maior IQS calculado · ${per().nome}`, ind: `${st.mapInd} · ${nomeInd(st.mapInd)} · ${OP_NOME[st.op]} · ${per().nome}`,
+    i4: `IND4 médio · ${OP_NOME[st.op]} · ${anoA()}`, i8: `IND8 médio · ${OP_NOME[st.op]} · ${anoA()}`, dec: `DEC acumulado de ${anoA()} (ANEEL)`, conf: `IND4: meses com amostra significativa · ${OP_NOME[st.op]}` }[st.layer];
+  $("mapTitle").textContent = tit;
+  $("mapLegend").innerHTML = BINS[st.layer]().map(([g, l]) => `<button type="button" data-g="${g}" aria-pressed="${!st.hidden.has(g)}">${gSwatch(g)}${l} <span class="num" style="color:var(--ink-3)">${int(cnt[g] || 0)}</span></button>`).join("");
+}
+function zoomTo() {
+  if (!st.mapReady) return;
+  const f = st.mun ? geo.mf.features.find(x => x.properties.codarea === st.mun) : st.uf ? geo.uf.features.find(x => UF_COD[x.properties.codarea] === st.uf) : null;
+  if (!f) { mapSvg.transition().duration(500).call(zoom.transform, d3.zoomIdentity); return; }
+  let [[x0, y0], [x1, y1]] = mapPath.bounds(f);
+  if (st.mun) { const pad = Math.max(30, (x1 - x0) * 2); x0 -= pad; y0 -= pad; x1 += pad; y1 += pad; }
+  const k = Math.min(60, 0.9 / Math.max((x1 - x0) / st.mapW, (y1 - y0) / st.mapH));
+  mapSvg.transition().duration(600).call(zoom.transform, d3.zoomIdentity.translate(st.mapW / 2 - k * (x0 + x1) / 2, st.mapH / 2 - k * (y0 + y1) / 2).scale(k));
+}
+function tipMap(ev, id) {
+  const ms = byId(id), ma = st.byIdA.get(id), m = ms || ma, el = $("map"), r = el.getBoundingClientRect(); if (!m) return;
+  let html = `<b>${esc(m.nome)}</b> <span class="muted">${m.uf}</span>`;
+  if (["selo", "lider", "ind"].includes(st.layer) && ms) html += OPS.map(o => ms[o]?.iqs != null ? `<div style="display:flex;justify-content:space-between;gap:12px;margin-top:4px"><span><i style="display:inline-block;width:8px;height:8px;border-radius:50%;background:${opFill(o)};margin-right:6px"></i>${OP_NOME[o]}</span><span class="num">${fmt(ms[o].iqs, 1)} ${pill(LETRA[ms[o].f])}</span></div>` : "").join("") + (st.layer === "ind" && ms[st.op] ? `<div class="small muted" style="margin-top:4px">${st.mapInd} ${OP_NOME[st.op]}: ${indFmt(st.mapInd, ms[st.op].v[IND.indexOf(st.mapInd)])}</div>` : "");
+  else if (ma) html += `<table style="margin-top:6px;font-size:12.5px;width:100%"><tr><td></td><td class="r" style="padding:2px 6px;color:var(--ink-3)">IND4</td><td class="r" style="padding:2px 0;color:var(--ink-3)">IND8</td></tr>` + OPS.map(o => ma[o] ? `<tr><td style="padding:2px 0"><i style="display:inline-block;width:8px;height:8px;border-radius:50%;background:${opFill(o)};margin-right:6px"></i>${OP_NOME[o]}</td><td class="r num" style="padding:2px 6px">${fmt(ma[o].i4, 1)}%</td><td class="r num" style="padding:2px 0">${fmt(ma[o].i8, 2)}%</td></tr>` : "").join("") + `</table>${ma.dec != null ? `<div class="small muted" style="margin-top:4px">DEC acumulado: ${fmt(ma.dec, 1)} h</div>` : ""}`;
+  st.tip.innerHTML = html; st.tip.hidden = false;
+  st.tip.style.left = `${Math.min(ev.clientX - r.left + 14, r.width - 230)}px`; st.tip.style.top = `${Math.min(ev.clientY - r.top + 14, r.height - 150)}px`;
+}
+
+/* ================= Interação ================= */
+async function setScope(uf, mun, scroll) { st.uf = uf || ""; st.mun = mun || null; st.openInd = null; st.nC = st.n4 = st.n8 = PASSO; await renderAll(); zoomTo(); if (scroll) $("mapa").scrollIntoView(); }
+function csv(rows, cols) { return [cols.map(c => c[0]).join(";"), ...rows.map((m, i) => cols.map(c => c[1](m, i)).join(";"))].join("\n"); }
+function copiar(txt, el, n) { navigator.clipboard.writeText(txt).then(() => { el.textContent = `${n} linhas copiadas.`; }).catch(() => { el.textContent = "Não foi possível copiar. Selecione a tabela e copie manualmente."; }); }
+function tabsKeys(container, onSelect) {
+  container.addEventListener("keydown", e => {
+    if (!["ArrowLeft", "ArrowRight", "Home", "End"].includes(e.key)) return;
+    const tabs = [...container.querySelectorAll('[role="tab"]')], i = tabs.indexOf(document.activeElement); if (i < 0) return;
+    const j = e.key === "Home" ? 0 : e.key === "End" ? tabs.length - 1 : (i + (e.key === "ArrowRight" ? 1 : -1) + tabs.length) % tabs.length;
+    e.preventDefault(); tabs[j].focus(); onSelect(tabs[j]);
+  });
+}
+function selectTab(tl, b) {
+  tl.querySelectorAll('[role="tab"]').forEach(x => { const on = x === b; x.setAttribute("aria-selected", on); x.tabIndex = on ? 0 : -1; $(x.dataset.tab).hidden = !on; });
+  const t = b.dataset.tab;
+  if (t === "t4-comp") renderScatter();
+  if (t === "t4-evo" || t === "t8-evo") renderChartsA();
+  if (t.startsWith("ev-")) renderEvo();
+}
+function pillGroup(id, key, render) {
+  $(id).addEventListener("click", e => { const b = e.target.closest("button[data-v]"); if (!b) return; st[key] = b.dataset.v; $(id).querySelectorAll("button[data-v]").forEach(x => x.setAttribute("aria-pressed", x === b)); st.n4 = st.n8 = st.nC = PASSO; render(); });
+}
+function openFromTable(e) {
+  const u = e.target.closest("[data-uf]"); if (u && u.closest("#ufTbl")) { setScope(u.dataset.uf, null); $("visao").scrollIntoView(); return; }
+  const r = e.target.closest("[data-id]"); if (!r) return;
+  const m = byId(r.dataset.id) || st.byIdA.get(r.dataset.id); if (m) setScope(m.uf, m.id, true);
+}
+function bind() {
+  $("fArea").addEventListener("click", e => { const b = e.target.closest("button[data-area]"); if (b && b.dataset.area !== st.area) setArea(b.dataset.area); });
+  tabsKeys($("fArea"), b => setArea(b.dataset.area));
+  $("fOp").addEventListener("click", e => { const b = e.target.closest("button[data-op]"); if (!b) return; st.op = b.dataset.op; setTheme(st.op); st.openInd = null; document.querySelectorAll("#fOp button").forEach(x => x.setAttribute("aria-pressed", x === b)); syncHash(); renderAll(); });
+  $("fPer").addEventListener("click", async e => { const b = e.target.closest("button[data-per]"); if (!b) return; st.per = b.dataset.per; document.querySelectorAll("#fPer button").forEach(x => x.setAttribute("aria-pressed", x === b)); await loadPer(st.per); renderAll(); });
+  $("fUf").addEventListener("change", e => setScope(e.target.value, null));
+  $("fMun").addEventListener("change", e => { const v = e.target.value.trim(), i = v.lastIndexOf(" - "); const m = list().find(x => i > 0 ? x.nome === v.slice(0, i) && x.uf === v.slice(i + 3) : x.nome.toLowerCase() === v.toLowerCase()); if (m) setScope(m.uf, m.id); });
+  $("fConf").addEventListener("change", e => { st.conf = e.target.checked; renderAll(); });
+  $("indGrid").addEventListener("click", e => { const b = e.target.closest(".indcard"); if (!b) return; st.openInd = b.dataset.ind; document.querySelectorAll(".indcard").forEach(x => x.setAttribute("aria-pressed", x === b)); renderIndDetail(); $("indDetail").scrollIntoView({ block: "nearest" }); });
+  document.querySelectorAll("main .tabs").forEach(tl => { tl.addEventListener("click", e => { const b = e.target.closest('[role="tab"]'); if (b) selectTab(tl, b); }); tabsKeys(tl, b => selectTab(tl, b)); });
+  $("mLayer").addEventListener("change", e => { st.layer = e.target.value; st.hidden.clear(); $("mInd").hidden = st.layer !== "ind"; paintMap(); });
+  $("mInd").addEventListener("change", e => { st.mapInd = e.target.value; st.hidden.clear(); paintMap(); });
+  $("mapLegend").addEventListener("click", e => { const b = e.target.closest("button[data-g]"); if (!b) return; const g = b.dataset.g; st.hidden.has(g) ? st.hidden.delete(g) : st.hidden.add(g); paintMap(); });
+  $("side").addEventListener("click", e => { const b = e.target.closest("button[data-id]"); if (!b) return; const m = byId(b.dataset.id) || st.byIdA.get(b.dataset.id); if (m) setScope(m.uf, m.id); });
+  for (const id of ["ufTbl", "cTbl", "t4", "t8"]) $(id).addEventListener("click", openFromTable);
+  $("cSort").addEventListener("click", e => { const b = e.target.closest("button[data-v]"); if (!b) return; st.cSort = b.dataset.v; st.nC = PASSO; $("cSort").querySelectorAll("button[data-v]").forEach(x => x.setAttribute("aria-pressed", x === b)); renderCidades(); });
+  pillGroup("s4", "s4", renderT4); pillGroup("d4", "d4", renderT4); pillGroup("s8", "s8", renderT8);
+  $("cMore").addEventListener("click", () => { st.nC += PASSO; renderCidades(); });
+  $("more4").addEventListener("click", () => { st.n4 += PASSO; renderT4(); });
+  $("more8").addEventListener("click", () => { st.n8 += PASSO; renderT8(); });
+  $("cCopy").addEventListener("click", () => { const op = st.op, rows = st.cRows || [];
+    copiar(csv(rows, [["posicao", (m, i) => i + 1], ["cidade", m => m.nome], ["uf", m => m.uf], ["ibge", m => m.id], ["acessos_media_mensal", m => m[op].a], ...OPS.map(x => [`selo_calc_${x.toLowerCase()}`, m => m[x]?.iqs != null ? LETRA[m[x].f] : ""]), ["iqs", m => fmt(m[op].iqs, 1)], ["indicador_menor_nota", m => { const k = worstK(m[op]); return k >= 0 ? IND[k] : ""; }]]), $("cMsg"), rows.length); });
+  $("copy4").addEventListener("click", () => { const op = st.op; copiar(csv(st.r4 || [], [["posicao", (m, i) => i + 1], ["cidade", m => m.nome], ["uf", m => m.uf], ["ibge", m => m.id], ["acessos_ultimo_mes", m => m[op].a], ["ind4_ano", m => fmt(m[op].i4, 2)], ["ind4_ultimo_mes", m => fmt(m[op].i4u, 2)], ["meses_amostra_significativa", m => `${m[op].k4}/${m[op].n4}`], ["medicoes", m => m[op].m4], ["mediana_download_4g_mbps", m => fmt(m[op].dl4, 1)], ["selo_calculado", m => LETRA[m[op].f]]]), $("msg4"), (st.r4 || []).length); });
+  $("copy8").addEventListener("click", () => { const op = st.op; copiar(csv(st.r8 || [], [["posicao", (m, i) => i + 1], ["cidade", m => m.nome], ["uf", m => m.uf], ["ibge", m => m.id], ["acessos_ultimo_mes", m => m[op].a], ["ind8_ano", m => fmt(m[op].i8, 3)], ["pior_mes", m => mesLbl(m[op].i8mm)], ["ind8_pior_mes", m => fmt(m[op].i8m, 3)], ["outras_operadoras_mesmo_mes", m => conc8(m[op])], ["dec_pior_mes_h", m => fmt(m[op].dpm, 2)], ["dec_mensal_mediano_h", m => fmt(m[op].dmed, 2)], ["selo_calculado", m => LETRA[m[op].f]]]), $("msg8"), (st.r8 || []).length); });
+  let rt, lw = innerWidth; window.addEventListener("resize", () => { clearTimeout(rt); rt = setTimeout(() => { if (st.R && Math.abs(innerWidth - lw) > 40) { lw = innerWidth; renderAll(); } }, 250); });
+  matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () => st.R && renderAll());
+  new MutationObserver(() => st.R && renderAll()).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
+}
+bind();
+load().catch(err => { $("headline").innerHTML = `<span style="color:var(--bad)">Não foi possível carregar os dados (${esc(err.message)}).</span>`; console.error(err); });
+</script>

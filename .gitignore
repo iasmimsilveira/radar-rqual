@@ -1,0 +1,9 @@
+.venv/
+/raw/
+/data/
+.claude/
+__pycache__/
+.DS_Store
+# cópias de versões antigas das páginas (ficam só na máquina)
+web/*_v*.html
+web/acesso.html
